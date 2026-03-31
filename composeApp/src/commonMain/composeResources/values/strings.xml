@@ -10,5 +10,5 @@
     <string name="app_dialog_create_body">The center add action and Home CTA both route through the shell. The future create-habit feature can replace this dialog.</string>
     <string name="app_dialog_edit_title">Edit Habit</string>
     <string name="app_dialog_edit_body">Home forwarded the selected habit id %1$s through a typed callback. A future editor feature can handle this flow.</string>
-    <string name="app_dialog_close">Close</string>
+    <string name="app_dialog_close">Close1</string>
 </resources>
