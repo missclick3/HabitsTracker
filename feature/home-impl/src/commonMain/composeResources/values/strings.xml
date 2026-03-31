@@ -1,0 +1,20 @@
+<resources>
+    <string name="home_header_overline">Welcome back</string>
+    <string name="home_header_title">Habits Tracker</string>
+    <string name="home_archive_avatar_label">A</string>
+    <string name="home_reflection_section_title">Daily reflection</string>
+    <string name="home_reflection_prompt">How does your heart feel today?</string>
+    <string name="home_reflection_note_placeholder">Share a few thoughts...</string>
+    <string name="home_habits_section_title">Daily habits</string>
+    <string name="home_new_habit_action">New habit</string>
+    <string name="home_empty_title">No habits yet</string>
+    <string name="home_empty_body">Start with one small habit and build momentum from there.</string>
+    <string name="home_empty_button">Create your first habit</string>
+    <string name="home_binary_completed_supporting">Completed for today</string>
+    <string name="home_binary_pending_supporting">Ready when you are</string>
+    <string name="home_binary_done">Done</string>
+    <string name="home_binary_mark">Mark</string>
+    <string name="home_count_supporting">%1$d of %2$d</string>
+    <string name="home_count_complete">Complete</string>
+    <string name="home_count_in_progress">In progress</string>
+</resources>
