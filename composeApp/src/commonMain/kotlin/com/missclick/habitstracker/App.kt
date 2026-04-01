@@ -206,7 +206,7 @@ private fun AppBottomBar(
             Box(contentAlignment = Alignment.Center) {
                 Text(
                     text = "+",
-                    style = HabitsTheme.textStyles.screenTitle,
+                    style = HabitsTheme.textStyles.headerName,
                     color = HabitsTheme.colors.onBrand,
                 )
             }
@@ -232,7 +232,7 @@ private fun BottomBarItem(
         Text(
             text = label,
             color = if (selected) HabitsTheme.colors.brandPrimary else HabitsTheme.colors.textInactive,
-            style = HabitsTheme.textStyles.actionLabel,
+            style = HabitsTheme.textStyles.navLabel,
         )
     }
 }
@@ -255,13 +255,13 @@ private fun PlaceholderScreen(
         ) {
             Text(
                 text = title,
-                style = HabitsTheme.textStyles.screenTitle,
+                style = HabitsTheme.textStyles.headerName,
                 color = HabitsTheme.colors.textPrimary,
                 textAlign = TextAlign.Center,
             )
             Text(
                 text = body,
-                style = HabitsTheme.textStyles.bodyMuted,
+                style = HabitsTheme.textStyles.bodyTextMuted,
                 color = HabitsTheme.colors.textHint,
                 textAlign = TextAlign.Center,
             )
@@ -299,7 +299,7 @@ private fun PlaceholderDialog(
         text = {
             Text(
                 text = message,
-                style = HabitsTheme.textStyles.body,
+                style = HabitsTheme.textStyles.bodyText,
                 color = HabitsTheme.colors.textMuted,
             )
         },

@@ -136,17 +136,17 @@ private fun HomeHeader(
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text(
                 text = (greetingLabel ?: stringResource(Res.string.home_header_overline)).uppercase(),
-                style = HabitsTheme.textStyles.sectionLabel,
+                style = HabitsTheme.textStyles.headerOverline,
                 color = HabitsTheme.colors.textTertiary,
             )
             Text(
                 text = stringResource(Res.string.home_header_title),
-                style = HabitsTheme.textStyles.screenTitle,
+                style = HabitsTheme.textStyles.headerName,
                 color = HabitsTheme.colors.textPrimary,
             )
             Text(
                 text = dateLabel,
-                style = HabitsTheme.textStyles.screenSubtitle,
+                style = HabitsTheme.textStyles.headerDate,
                 color = HabitsTheme.colors.textSecondary,
             )
         }
@@ -163,7 +163,7 @@ private fun HomeHeader(
                 Text(
                     text = stringResource(Res.string.home_archive_avatar_label),
                     color = HabitsTheme.colors.brandPrimary,
-                    style = HabitsTheme.textStyles.chipLabel,
+                    style = HabitsTheme.textStyles.actionLabel,
                 )
             }
         }
@@ -182,7 +182,7 @@ private fun ReflectionCard(
     ) {
         Text(
             text = stringResource(Res.string.home_reflection_prompt),
-            style = HabitsTheme.textStyles.cardTitle,
+            style = HabitsTheme.textStyles.bodyPrompt,
             color = HabitsTheme.colors.textStrong,
         )
         Spacer(modifier = Modifier.height(18.dp))
@@ -205,12 +205,12 @@ private fun ReflectionCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(140.dp),
-            textStyle = HabitsTheme.textStyles.body,
+            textStyle = HabitsTheme.textStyles.bodyText,
             shape = RoundedCornerShape(20.dp),
             placeholder = {
                 Text(
                     text = stringResource(Res.string.home_reflection_note_placeholder),
-                    style = HabitsTheme.textStyles.bodyMuted,
+                    style = HabitsTheme.textStyles.bodyTextMuted,
                     color = HabitsTheme.colors.textHint,
                 )
             },
@@ -244,7 +244,7 @@ private fun SectionHeader(
     ) {
         Text(
             text = title.uppercase(),
-            style = HabitsTheme.textStyles.sectionLabel,
+            style = HabitsTheme.textStyles.sectionOverline,
             color = HabitsTheme.colors.textTertiary,
         )
         Text(
@@ -282,7 +282,7 @@ private fun EmptyHabitsCard(
             )
             Text(
                 text = stringResource(Res.string.home_empty_body),
-                style = HabitsTheme.textStyles.bodyMuted,
+                style = HabitsTheme.textStyles.bodyTextMuted,
                 textAlign = TextAlign.Center,
                 color = HabitsTheme.colors.textMuted,
             )
@@ -344,7 +344,7 @@ private fun HabitCard(
                     Text(
                         text = habitSupportingText(habit.progress),
                         color = HabitsTheme.colors.textMuted,
-                        style = HabitsTheme.textStyles.supporting,
+                        style = HabitsTheme.textStyles.bodyTextMuted,
                     )
                 }
 
@@ -445,7 +445,7 @@ private fun StepChip(
             Text(
                 text = label,
                 color = HabitsTheme.colors.brandPrimary,
-                style = HabitsTheme.textStyles.chipLabel,
+                style = HabitsTheme.textStyles.actionLabel,
             )
         }
     }
@@ -487,7 +487,7 @@ private fun MoodChip(
             Text(
                 text = mood.toFace(),
                 color = content,
-                style = HabitsTheme.textStyles.chipLabel,
+                style = HabitsTheme.textStyles.actionLabel,
             )
         }
     }
@@ -505,7 +505,7 @@ private fun SectionCard(
     ) {
         Text(
             text = title.uppercase(),
-            style = HabitsTheme.textStyles.sectionLabel,
+            style = HabitsTheme.textStyles.sectionOverline,
             color = HabitsTheme.colors.textTertiary,
             modifier = Modifier.padding(horizontal = 4.dp),
         )

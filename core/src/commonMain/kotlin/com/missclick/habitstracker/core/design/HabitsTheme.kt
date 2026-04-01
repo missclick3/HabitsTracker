@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import habitstracker.core.generated.resources.Res
 import habitstracker.core.generated.resources.manrope_bold
 import habitstracker.core.generated.resources.manrope_regular
@@ -40,42 +41,60 @@ data class HabitColors(
 
 @Immutable
 data class HabitTextStyles(
-    val screenTitle: TextStyle,
-    val screenSubtitle: TextStyle,
-    val sectionLabel: TextStyle,
+    val headerOverline: TextStyle,
+    val sectionOverline: TextStyle,
+    val headerName: TextStyle,
+    val headerDate: TextStyle,
+    val bodyPrompt: TextStyle,
+    val bodyText: TextStyle,
+    val bodyTextMuted: TextStyle,
     val cardTitle: TextStyle,
-    val body: TextStyle,
-    val bodyMuted: TextStyle,
     val actionLabel: TextStyle,
-    val chipLabel: TextStyle,
-    val supporting: TextStyle,
+    val navLabel: TextStyle,
     val metricValue: TextStyle,
     val buttonLabel: TextStyle,
 )
 
-private val LightHabitColors = HabitColors(
-    brandPrimary = Color(0xFF7E5BFF),
-    brandPrimarySoft = Color(0xFFF0EEFF),
-    brandPrimarySoftSelected = Color(0xFFF1ECFF),
-    background = Color(0xFFF8F7FB),
+internal val HabitsLightColors = HabitColors(
+    brandPrimary = Color(0xFF7950F2),
+    brandPrimarySoft = Color(0xFFF3F0FF),
+    brandPrimarySoftSelected = Color(0xFFF3F0FF),
+    background = Color(0xFFF8FAFC),
     surface = Color.White,
-    surfaceSubtle = Color(0xFFF7F7FB),
-    textPrimary = Color(0xFF12182C),
-    textStrong = Color(0xFF1A2036),
-    textSecondary = Color(0xFF2B3551),
-    textMuted = Color(0xFF6E7894),
-    textHint = Color(0xFF66708B),
-    textTertiary = Color(0xFF8D98B3),
-    textInactive = Color(0xFF9AA4BD),
-    success = Color(0xFF18A872),
+    surfaceSubtle = Color(0xFFF8FAFC),
+    textPrimary = Color(0xFF0F172A),
+    textStrong = Color(0xFF1E293B),
+    textSecondary = Color(0xFF64748B),
+    textMuted = Color(0xFF94A3B8),
+    textHint = Color(0xFF94A3B8),
+    textTertiary = Color(0xFF94A3B8),
+    textInactive = Color(0xFF94A3B8),
+    success = Color(0xFF0CA678),
     onBrand = Color.White,
-    border = Color(0xFF8D98B3),
+    border = Color(0xFFF1F5F9),
 )
 
-private val DarkHabitColors = LightHabitColors
+internal val HabitsDarkColors = HabitColors(
+    brandPrimary = Color(0xFF7950F2),
+    brandPrimarySoft = Color(0xFFF3F0FF),
+    brandPrimarySoftSelected = Color(0xFFF3F0FF),
+    background = Color(0xFFF8FAFC),
+    surface = Color.White,
+    surfaceSubtle = Color(0xFFF8FAFC),
+    textPrimary = Color(0xFF0F172A),
+    textStrong = Color(0xFF1E293B),
+    textSecondary = Color(0xFF64748B),
+    textMuted = Color(0xFF94A3B8),
+    textHint = Color(0xFF94A3B8),
+    textTertiary = Color(0xFF94A3B8),
+    textInactive = Color(0xFF94A3B8),
+    success = Color(0xFF0CA678),
+    onBrand = Color.White,
+    border = Color(0xFFF1F5F9),
+)
 
-private val LocalHabitColors = staticCompositionLocalOf { LightHabitColors }
-private val LocalHabitTextStyles = staticCompositionLocalOf { defaultTextStyles(Typography()) }
+private val LocalHabitColors = staticCompositionLocalOf { HabitsLightColors }
+private val LocalHabitTextStyles = staticCompositionLocalOf { habitsTextStyles(Typography()) }
 
 object HabitsTheme {
     val colors: HabitColors
@@ -90,7 +109,7 @@ fun HabitsTrackerTheme(
     useDarkTheme: Boolean = false,
     content: @Composable () -> Unit,
 ) {
-    val colors = if (useDarkTheme) DarkHabitColors else LightHabitColors
+    val colors = if (useDarkTheme) HabitsDarkColors else HabitsLightColors
     val typography = Typography().withDefaultFontFamily(
         fontFamily = FontFamily(
             Font(resource = Res.font.manrope_regular, weight = FontWeight.Normal),
@@ -133,7 +152,7 @@ fun HabitsTrackerTheme(
     ) {
         CompositionLocalProvider(
             LocalHabitColors provides colors,
-            LocalHabitTextStyles provides defaultTextStyles(typography),
+            LocalHabitTextStyles provides habitsTextStyles(typography),
             content = content,
         )
     }
@@ -157,16 +176,77 @@ private fun Typography.withDefaultFontFamily(fontFamily: FontFamily): Typography
     labelSmall = labelSmall.copy(fontFamily = fontFamily),
 )
 
-private fun defaultTextStyles(typography: Typography): HabitTextStyles = HabitTextStyles(
-    screenTitle = typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
-    screenSubtitle = typography.titleLarge.copy(fontWeight = FontWeight.SemiBold),
-    sectionLabel = typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-    cardTitle = typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-    body = typography.bodyMedium,
-    bodyMuted = typography.bodyMedium,
-    actionLabel = typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
-    chipLabel = typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-    supporting = typography.bodyMedium,
-    metricValue = typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-    buttonLabel = typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
+internal fun habitsTextStyles(typography: Typography): HabitTextStyles = HabitTextStyles(
+    headerOverline = typography.labelSmall.copy(
+        fontWeight = FontWeight.Bold,
+        fontSize = 11.sp,
+        lineHeight = 16.5.sp,
+        letterSpacing = 1.1.sp,
+    ),
+    sectionOverline = typography.labelLarge.copy(
+        fontWeight = FontWeight.Bold,
+        fontSize = 12.sp,
+        lineHeight = 18.sp,
+        letterSpacing = 2.4.sp,
+    ),
+    headerName = typography.titleLarge.copy(
+        fontWeight = FontWeight.Bold,
+        fontSize = 20.sp,
+        lineHeight = 28.sp,
+        letterSpacing = (-0.5).sp,
+    ),
+    headerDate = typography.headlineMedium.copy(
+        fontWeight = FontWeight.Bold,
+        fontSize = 30.sp,
+        lineHeight = 36.sp,
+        letterSpacing = (-0.75).sp,
+    ),
+    bodyPrompt = typography.bodyLarge.copy(
+        fontWeight = FontWeight.Bold,
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.sp,
+    ),
+    bodyText = typography.bodyMedium.copy(
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.sp,
+    ),
+    bodyTextMuted = typography.bodyMedium.copy(
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp,
+        lineHeight = 24.sp,
+        letterSpacing = 0.sp,
+    ),
+    cardTitle = typography.titleLarge.copy(
+        fontWeight = FontWeight.Bold,
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.sp,
+    ),
+    actionLabel = typography.labelLarge.copy(
+        fontWeight = FontWeight.Bold,
+        fontSize = 12.sp,
+        lineHeight = 16.sp,
+        letterSpacing = 0.sp,
+    ),
+    navLabel = typography.labelSmall.copy(
+        fontWeight = FontWeight.Bold,
+        fontSize = 10.sp,
+        lineHeight = 15.sp,
+        letterSpacing = 1.sp,
+    ),
+    metricValue = typography.titleMedium.copy(
+        fontWeight = FontWeight.Bold,
+        fontSize = 24.sp,
+        lineHeight = 32.sp,
+        letterSpacing = 0.sp,
+    ),
+    buttonLabel = typography.labelLarge.copy(
+        fontWeight = FontWeight.Bold,
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.sp,
+    ),
 )
