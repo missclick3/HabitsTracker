@@ -1,5 +1,7 @@
 package com.missclick.habitstracker.home.impl.domain.repository
 
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import com.missclick.habitstracker.core.model.HabitId
 import com.missclick.habitstracker.core.model.HabitKind
 import com.missclick.habitstracker.core.model.Mood
@@ -20,7 +22,6 @@ internal interface IHomeRepository {
 }
 
 internal data class HomeSnapshot(
-    val greetingLabel: String?,
     val dateLabel: String,
     val habits: List<HomeHabit>,
     val reflection: HomeReflection,

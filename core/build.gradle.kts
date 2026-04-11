@@ -40,3 +40,7 @@ kotlin {
 android {
     namespace = "com.missclick.habitstracker.core"
 }
+
+compose.resources {
+    publicResClass = true
+}

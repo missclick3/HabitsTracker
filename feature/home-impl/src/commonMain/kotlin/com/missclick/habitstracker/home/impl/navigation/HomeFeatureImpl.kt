@@ -13,6 +13,7 @@ import com.missclick.habitstracker.home.api.HomeRoute
 import com.missclick.habitstracker.home.impl.domain.mapper.HomeStateMapper
 import com.missclick.habitstracker.home.impl.domain.repository.IHomeRepository
 import com.missclick.habitstracker.home.impl.domain.usecase.DecrementHabitUseCase
+import com.missclick.habitstracker.home.impl.domain.usecase.GetTodayDateLabelUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.IncrementHabitUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.ObserveHomeUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.ToggleHabitUseCase
@@ -41,6 +42,7 @@ internal class HomeFeatureImpl(
                 decrementHabit = DecrementHabitUseCase(repository),
                 updateReflectionMood = UpdateReflectionMoodUseCase(repository),
                 updateReflectionNote = UpdateReflectionNoteUseCase(repository),
+                getTodayDateLabelUseCase = GetTodayDateLabelUseCase(),
             )
         }
         val state by viewModel.state.collectAsState()

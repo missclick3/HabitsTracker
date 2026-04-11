@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,8 +19,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,12 +29,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.missclick.habitstracker.core.design.HabitsTheme
 import com.missclick.habitstracker.core.model.HabitId
-import com.missclick.habitstracker.core.model.Mood
+import com.missclick.habitstracker.core.utils.StringUtils.EMPTY_STRING
 import com.missclick.habitstracker.home.impl.presenter.HomeHabitItem
 import com.missclick.habitstracker.home.impl.presenter.HomeHabitProgress
 import com.missclick.habitstracker.home.impl.presenter.HomeIntent
 import com.missclick.habitstracker.home.impl.presenter.HomeState
 import com.missclick.habitstracker.home.impl.presenter.ReflectionUiState
+import com.missclick.habitstracker.home.impl.ui.components.HeaderBlock
+import com.missclick.habitstracker.home.impl.ui.components.ReflectionsBlock
 import habitstracker.home_impl.generated.resources.Res
 import habitstracker.home_impl.generated.resources.home_archive_avatar_label
 import habitstracker.home_impl.generated.resources.home_binary_completed_supporting
@@ -54,9 +53,6 @@ import habitstracker.home_impl.generated.resources.home_habits_section_title
 import habitstracker.home_impl.generated.resources.home_header_overline
 import habitstracker.home_impl.generated.resources.home_header_title
 import habitstracker.home_impl.generated.resources.home_new_habit_action
-import habitstracker.home_impl.generated.resources.home_reflection_note_placeholder
-import habitstracker.home_impl.generated.resources.home_reflection_prompt
-import habitstracker.home_impl.generated.resources.home_reflection_section_title
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -72,15 +68,14 @@ internal fun HomeScreen(
         verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
         item {
-            HomeHeader(
-                greetingLabel = state.greetingLabel,
-                dateLabel = state.dateLabel,
-                onOpenArchive = { onIntent(HomeIntent.ArchiveClicked) },
+            HeaderBlock(
+                greetingLabel = "Alex Sterling",
+                date = state.dateLabel.replace(".", EMPTY_STRING)
             )
         }
 
         item {
-            ReflectionCard(
+            ReflectionsBlock(
                 state = state.reflection,
                 onMoodSelected = { onIntent(HomeIntent.MoodSelected(it)) },
                 onNoteChanged = { onIntent(HomeIntent.ReflectionNoteChanged(it)) },
@@ -167,65 +162,6 @@ private fun HomeHeader(
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun ReflectionCard(
-    state: ReflectionUiState,
-    onMoodSelected: (Mood) -> Unit,
-    onNoteChanged: (String) -> Unit,
-) {
-    SectionCard(
-        title = stringResource(Res.string.home_reflection_section_title),
-        modifier = Modifier.padding(horizontal = 20.dp),
-    ) {
-        Text(
-            text = stringResource(Res.string.home_reflection_prompt),
-            style = HabitsTheme.textStyles.bodyPrompt,
-            color = HabitsTheme.colors.textStrong,
-        )
-        Spacer(modifier = Modifier.height(18.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Mood.entries.forEach { mood ->
-                MoodChip(
-                    mood = mood,
-                    isSelected = state.selectedMood == mood,
-                    onClick = { onMoodSelected(mood) },
-                )
-            }
-        }
-        Spacer(modifier = Modifier.height(18.dp))
-        OutlinedTextField(
-            value = state.note,
-            onValueChange = onNoteChanged,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(140.dp),
-            textStyle = HabitsTheme.textStyles.bodyText,
-            shape = RoundedCornerShape(20.dp),
-            placeholder = {
-                Text(
-                    text = stringResource(Res.string.home_reflection_note_placeholder),
-                    style = HabitsTheme.textStyles.bodyTextMuted,
-                    color = HabitsTheme.colors.textHint,
-                )
-            },
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedContainerColor = HabitsTheme.colors.surfaceSubtle,
-                unfocusedContainerColor = HabitsTheme.colors.surfaceSubtle,
-                focusedTextColor = HabitsTheme.colors.textPrimary,
-                unfocusedTextColor = HabitsTheme.colors.textPrimary,
-                focusedBorderColor = HabitsTheme.colors.brandPrimary,
-                unfocusedBorderColor = HabitsTheme.colors.border,
-                cursorColor = HabitsTheme.colors.brandPrimary,
-                focusedPlaceholderColor = HabitsTheme.colors.textHint,
-                unfocusedPlaceholderColor = HabitsTheme.colors.textHint,
-            ),
-        )
     }
 }
 
@@ -464,71 +400,4 @@ private fun habitSupportingText(progress: HomeHabitProgress): String = when (pro
         progress.current,
         progress.target,
     )
-}
-
-@Composable
-private fun MoodChip(
-    mood: Mood,
-    isSelected: Boolean,
-    onClick: () -> Unit,
-) {
-    val background = if (isSelected) HabitsTheme.colors.brandPrimarySoftSelected else HabitsTheme.colors.surfaceSubtle
-    val content = if (isSelected) HabitsTheme.colors.brandPrimary else HabitsTheme.colors.textInactive
-
-    Surface(
-        modifier = Modifier
-            .size(48.dp)
-            .clip(CircleShape)
-            .clickable(onClick = onClick),
-        color = background,
-        shadowElevation = if (isSelected) 4.dp else 0.dp,
-    ) {
-        Box(contentAlignment = Alignment.Center) {
-            Text(
-                text = mood.toFace(),
-                color = content,
-                style = HabitsTheme.textStyles.actionLabel,
-            )
-        }
-    }
-}
-
-@Composable
-private fun SectionCard(
-    title: String,
-    modifier: Modifier = Modifier,
-    content: @Composable ColumnScope.() -> Unit,
-) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(10.dp),
-    ) {
-        Text(
-            text = title.uppercase(),
-            style = HabitsTheme.textStyles.sectionOverline,
-            color = HabitsTheme.colors.textTertiary,
-            modifier = Modifier.padding(horizontal = 4.dp),
-        )
-        Card(
-            colors = CardDefaults.cardColors(containerColor = HabitsTheme.colors.surface),
-            shape = RoundedCornerShape(32.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(22.dp),
-            ) {
-                content()
-            }
-        }
-    }
-}
-
-private fun Mood.toFace(): String = when (this) {
-    Mood.Drained -> ":("
-    Mood.Low -> ":-|"
-    Mood.Neutral -> ":|"
-    Mood.Good -> ":)"
-    Mood.Great -> ":D"
 }

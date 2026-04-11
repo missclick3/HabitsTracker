@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.update
 internal class InMemoryHomeRepository : IHomeRepository {
     private val snapshot = MutableStateFlow(
         HomeSnapshot(
-            greetingLabel = null,
             dateLabel = "",
             habits = listOf(
                 HomeHabit(
@@ -37,7 +36,7 @@ internal class InMemoryHomeRepository : IHomeRepository {
             ),
             reflection = HomeReflection(
                 selectedMood = Mood.Good,
-                note = "Felt focused after a quiet morning walk.",
+                note = "",
             ),
         ),
     )

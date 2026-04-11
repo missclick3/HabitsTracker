@@ -1,6 +1,7 @@
 package com.missclick.habitstracker.home.impl.presenter
 
 import com.missclick.habitstracker.home.impl.domain.usecase.DecrementHabitUseCase
+import com.missclick.habitstracker.home.impl.domain.usecase.GetTodayDateLabelUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.IncrementHabitUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.ObserveHomeUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.ToggleHabitUseCase
@@ -19,6 +20,9 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.todayIn
+import kotlin.time.Clock
 
 internal class HomeViewModel(
     private val observeHome: ObserveHomeUseCase,
@@ -27,6 +31,7 @@ internal class HomeViewModel(
     private val decrementHabit: DecrementHabitUseCase,
     private val updateReflectionMood: UpdateReflectionMoodUseCase,
     private val updateReflectionNote: UpdateReflectionNoteUseCase,
+    private val getTodayDateLabelUseCase: GetTodayDateLabelUseCase,
 ) {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private val mutableState = MutableStateFlow(HomeState.default())
@@ -78,7 +83,9 @@ internal class HomeViewModel(
 
         observeJob = launch {
             observeHome().collect { homeState ->
-                mutableState.value = homeState
+                mutableState.value = homeState.copy(
+                    dateLabel = getTodayDateLabelUseCase()
+                )
             }
         }
     }

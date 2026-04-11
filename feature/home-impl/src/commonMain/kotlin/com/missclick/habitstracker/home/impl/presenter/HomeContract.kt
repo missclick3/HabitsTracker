@@ -18,7 +18,6 @@ internal sealed interface HomeIntent {
 
 internal data class HomeState(
     val dateLabel: String,
-    val greetingLabel: String?,
     val habits: List<HomeHabitItem>,
     val reflection: ReflectionUiState,
     val isEmpty: Boolean,
@@ -27,7 +26,6 @@ internal data class HomeState(
     companion object {
         fun default() = HomeState(
             dateLabel = EMPTY_STRING,
-            greetingLabel = null,
             habits = emptyList(),
             reflection = ReflectionUiState(),
             isEmpty = true,
