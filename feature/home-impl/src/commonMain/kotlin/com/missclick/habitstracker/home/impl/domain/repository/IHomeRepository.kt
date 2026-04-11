@@ -1,7 +1,5 @@
 package com.missclick.habitstracker.home.impl.domain.repository
 
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.BitmapPainter
 import com.missclick.habitstracker.core.model.HabitId
 import com.missclick.habitstracker.core.model.HabitKind
 import com.missclick.habitstracker.core.model.Mood

@@ -34,17 +34,18 @@ internal class HomeFeatureImpl(
         modifier: Modifier,
         callbacks: HomeCallbacks,
     ) {
-        val viewModel = remember(repository) {
-            HomeViewModel(
-                observeHome = ObserveHomeUseCase(repository, HomeStateMapper()),
-                toggleHabit = ToggleHabitUseCase(repository),
-                incrementHabit = IncrementHabitUseCase(repository),
-                decrementHabit = DecrementHabitUseCase(repository),
-                updateReflectionMood = UpdateReflectionMoodUseCase(repository),
-                updateReflectionNote = UpdateReflectionNoteUseCase(repository),
-                getTodayDateLabelUseCase = GetTodayDateLabelUseCase(),
-            )
-        }
+        val viewModel =
+            remember(repository) {
+                HomeViewModel(
+                    observeHome = ObserveHomeUseCase(repository, HomeStateMapper()),
+                    toggleHabit = ToggleHabitUseCase(repository),
+                    incrementHabit = IncrementHabitUseCase(repository),
+                    decrementHabit = DecrementHabitUseCase(repository),
+                    updateReflectionMood = UpdateReflectionMoodUseCase(repository),
+                    updateReflectionNote = UpdateReflectionNoteUseCase(repository),
+                    getTodayDateLabelUseCase = GetTodayDateLabelUseCase(),
+                )
+            }
         val state by viewModel.state.collectAsState()
 
         LaunchedEffect(viewModel) {

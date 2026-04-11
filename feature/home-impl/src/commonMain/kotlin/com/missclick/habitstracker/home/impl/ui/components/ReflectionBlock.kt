@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import com.missclick.habitstracker.core.design.HabitsTheme
 import com.missclick.habitstracker.core.model.Mood
 import com.missclick.habitstracker.home.impl.presenter.ReflectionUiState
-import habitstracker.core.generated.resources.Res as CoreRes
 import habitstracker.core.generated.resources.mood_drained
 import habitstracker.core.generated.resources.mood_good
 import habitstracker.core.generated.resources.mood_great
@@ -40,6 +39,7 @@ import habitstracker.home_impl.generated.resources.home_reflection_section_title
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import habitstracker.core.generated.resources.Res as CoreRes
 
 @Composable
 internal fun ReflectionsBlock(
@@ -47,9 +47,10 @@ internal fun ReflectionsBlock(
     onMoodSelected: (Mood) -> Unit,
     onNoteChanged: (String) -> Unit,
 ) = Column(
-    modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 24.dp)
+    modifier =
+        Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp),
 ) {
     Text(
         text = stringResource(Res.string.home_reflection_section_title).uppercase(),
@@ -59,9 +60,10 @@ internal fun ReflectionsBlock(
     )
     Spacer(modifier = Modifier.size(16.dp))
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(HabitsTheme.colors.surface, RoundedCornerShape(28.dp)),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .background(HabitsTheme.colors.surface, RoundedCornerShape(28.dp)),
     ) {
         Column(modifier = Modifier.padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
@@ -86,9 +88,10 @@ internal fun ReflectionsBlock(
             OutlinedTextField(
                 value = state.note,
                 onValueChange = onNoteChanged,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(140.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(140.dp),
                 textStyle = HabitsTheme.textStyles.bodyText,
                 shape = RoundedCornerShape(16.dp),
                 placeholder = {
@@ -98,17 +101,18 @@ internal fun ReflectionsBlock(
                         color = HabitsTheme.colors.textHint,
                     )
                 },
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = HabitsTheme.colors.surfaceSubtle,
-                    unfocusedContainerColor = HabitsTheme.colors.surfaceSubtle,
-                    focusedTextColor = HabitsTheme.colors.textPrimary,
-                    unfocusedTextColor = HabitsTheme.colors.textPrimary,
-                    focusedBorderColor = HabitsTheme.colors.brandPrimary,
-                    unfocusedBorderColor = HabitsTheme.colors.border,
-                    cursorColor = HabitsTheme.colors.brandPrimary,
-                    focusedPlaceholderColor = HabitsTheme.colors.textHint,
-                    unfocusedPlaceholderColor = HabitsTheme.colors.textHint,
-                ),
+                colors =
+                    OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = HabitsTheme.colors.surfaceSubtle,
+                        unfocusedContainerColor = HabitsTheme.colors.surfaceSubtle,
+                        focusedTextColor = HabitsTheme.colors.textPrimary,
+                        unfocusedTextColor = HabitsTheme.colors.textPrimary,
+                        focusedBorderColor = HabitsTheme.colors.brandPrimary,
+                        unfocusedBorderColor = HabitsTheme.colors.border,
+                        cursorColor = HabitsTheme.colors.brandPrimary,
+                        focusedPlaceholderColor = HabitsTheme.colors.textHint,
+                        unfocusedPlaceholderColor = HabitsTheme.colors.textHint,
+                    ),
             )
         }
     }
@@ -124,10 +128,11 @@ private fun MoodChip(
     val content = if (isSelected) Color.Black else HabitsTheme.colors.textInactive
 
     Surface(
-        modifier = Modifier
-            .size(48.dp)
-            .clip(CircleShape)
-            .clickable(onClick = onClick),
+        modifier =
+            Modifier
+                .size(48.dp)
+                .clip(CircleShape)
+                .clickable(onClick = onClick),
         color = selectedBackground,
     ) {
         Box(contentAlignment = Alignment.Center) {
@@ -141,19 +146,21 @@ private fun MoodChip(
     }
 }
 
-private fun Mood.toIconResource(): DrawableResource = when (this) {
-    Mood.Drained -> CoreRes.drawable.mood_drained
-    Mood.Low -> CoreRes.drawable.mood_low
-    Mood.Neutral -> CoreRes.drawable.mood_neutral
-    Mood.Good -> CoreRes.drawable.mood_good
-    Mood.Great -> CoreRes.drawable.mood_great
-}
+private fun Mood.toIconResource(): DrawableResource =
+    when (this) {
+        Mood.Drained -> CoreRes.drawable.mood_drained
+        Mood.Low -> CoreRes.drawable.mood_low
+        Mood.Neutral -> CoreRes.drawable.mood_neutral
+        Mood.Good -> CoreRes.drawable.mood_good
+        Mood.Great -> CoreRes.drawable.mood_great
+    }
 
 @Composable
-private fun Mood.toIconColor() = when(this) {
-    Mood.Drained -> HabitsTheme.colors.moodDrained
-    Mood.Low -> HabitsTheme.colors.moodLow
-    Mood.Neutral -> HabitsTheme.colors.moodNeutral
-    Mood.Good -> HabitsTheme.colors.moodGood
-    Mood.Great -> HabitsTheme.colors.moodGreat
-}
+private fun Mood.toIconColor() =
+    when (this) {
+        Mood.Drained -> HabitsTheme.colors.moodDrained
+        Mood.Low -> HabitsTheme.colors.moodLow
+        Mood.Neutral -> HabitsTheme.colors.moodNeutral
+        Mood.Good -> HabitsTheme.colors.moodGood
+        Mood.Great -> HabitsTheme.colors.moodGreat
+    }

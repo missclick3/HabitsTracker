@@ -34,7 +34,6 @@ import com.missclick.habitstracker.home.impl.presenter.HomeHabitItem
 import com.missclick.habitstracker.home.impl.presenter.HomeHabitProgress
 import com.missclick.habitstracker.home.impl.presenter.HomeIntent
 import com.missclick.habitstracker.home.impl.presenter.HomeState
-import com.missclick.habitstracker.home.impl.presenter.ReflectionUiState
 import com.missclick.habitstracker.home.impl.ui.components.HeaderBlock
 import com.missclick.habitstracker.home.impl.ui.components.ReflectionsBlock
 import habitstracker.home_impl.generated.resources.Res
@@ -62,15 +61,16 @@ internal fun HomeScreen(
     onIntent: (HomeIntent) -> Unit,
 ) {
     LazyColumn(
-        modifier = modifier
-            .fillMaxSize()
-            .background(HabitsTheme.colors.background),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(HabitsTheme.colors.background),
         verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
         item {
             HeaderBlock(
                 greetingLabel = "Alex Sterling",
-                date = state.dateLabel.replace(".", EMPTY_STRING)
+                date = state.dateLabel.replace(".", EMPTY_STRING),
             )
         }
 
@@ -122,9 +122,10 @@ private fun HomeHeader(
     onOpenArchive: () -> Unit,
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 24.dp, start = 20.dp, end = 20.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 24.dp, start = 20.dp, end = 20.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.Top,
     ) {
@@ -147,10 +148,11 @@ private fun HomeHeader(
         }
 
         Surface(
-            modifier = Modifier
-                .size(52.dp)
-                .clip(CircleShape)
-                .clickable(onClick = onOpenArchive),
+            modifier =
+                Modifier
+                    .size(52.dp)
+                    .clip(CircleShape)
+                    .clickable(onClick = onOpenArchive),
             color = HabitsTheme.colors.surface,
             shadowElevation = 6.dp,
         ) {
@@ -172,9 +174,10 @@ private fun SectionHeader(
     onActionClick: () -> Unit,
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -193,21 +196,21 @@ private fun SectionHeader(
 }
 
 @Composable
-private fun EmptyHabitsCard(
-    onCreateHabit: () -> Unit,
-) {
+private fun EmptyHabitsCard(onCreateHabit: () -> Unit) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
         colors = CardDefaults.cardColors(containerColor = HabitsTheme.colors.surface),
         shape = RoundedCornerShape(28.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(24.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
@@ -224,10 +227,11 @@ private fun EmptyHabitsCard(
             )
             Button(
                 onClick = onCreateHabit,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = HabitsTheme.colors.brandPrimary,
-                    contentColor = HabitsTheme.colors.onBrand,
-                ),
+                colors =
+                    ButtonDefaults.buttonColors(
+                        containerColor = HabitsTheme.colors.brandPrimary,
+                        contentColor = HabitsTheme.colors.onBrand,
+                    ),
             ) {
                 Text(
                     text = stringResource(Res.string.home_empty_button),
@@ -247,18 +251,20 @@ private fun HabitCard(
     onOpenEdit: (HabitId) -> Unit,
 ) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
         onClick = { onOpenEdit(habit.id) },
         colors = CardDefaults.cardColors(containerColor = HabitsTheme.colors.surface),
         shape = RoundedCornerShape(28.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             Row(
@@ -267,9 +273,10 @@ private fun HabitCard(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth(0.58f)
-                        .padding(end = 16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth(0.58f)
+                            .padding(end = 16.dp),
                 ) {
                     Text(
                         text = habit.title,
@@ -285,18 +292,20 @@ private fun HabitCard(
                 }
 
                 when (val progress = habit.progress) {
-                    is HomeHabitProgress.Binary -> BinaryProgressBadge(
-                        isCompleted = progress.isCompleted,
-                        onToggle = { onToggle(habit.id) },
-                    )
+                    is HomeHabitProgress.Binary ->
+                        BinaryProgressBadge(
+                            isCompleted = progress.isCompleted,
+                            onToggle = { onToggle(habit.id) },
+                        )
 
-                    is HomeHabitProgress.Count -> CountProgressControls(
-                        current = progress.current,
-                        target = progress.target,
-                        isCompleted = progress.isCompleted,
-                        onIncrement = { onIncrement(habit.id) },
-                        onDecrement = { onDecrement(habit.id) },
-                    )
+                    is HomeHabitProgress.Count ->
+                        CountProgressControls(
+                            current = progress.current,
+                            target = progress.target,
+                            isCompleted = progress.isCompleted,
+                            onIncrement = { onIncrement(habit.id) },
+                            onDecrement = { onDecrement(habit.id) },
+                        )
                 }
             }
         }
@@ -309,9 +318,10 @@ private fun BinaryProgressBadge(
     onToggle: () -> Unit,
 ) {
     Surface(
-        modifier = Modifier
-            .clip(CircleShape)
-            .clickable(onClick = onToggle),
+        modifier =
+            Modifier
+                .clip(CircleShape)
+                .clickable(onClick = onToggle),
         color = if (isCompleted) HabitsTheme.colors.brandPrimary else HabitsTheme.colors.brandPrimarySoft,
     ) {
         Box(
@@ -319,11 +329,12 @@ private fun BinaryProgressBadge(
             contentAlignment = Alignment.Center,
         ) {
             Text(
-                text = if (isCompleted) {
-                    stringResource(Res.string.home_binary_done)
-                } else {
-                    stringResource(Res.string.home_binary_mark)
-                },
+                text =
+                    if (isCompleted) {
+                        stringResource(Res.string.home_binary_done)
+                    } else {
+                        stringResource(Res.string.home_binary_mark)
+                    },
                 color = if (isCompleted) HabitsTheme.colors.onBrand else HabitsTheme.colors.brandPrimary,
                 style = HabitsTheme.textStyles.actionLabel,
             )
@@ -354,11 +365,12 @@ private fun CountProgressControls(
         }
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = if (isCompleted) {
-                stringResource(Res.string.home_count_complete)
-            } else {
-                stringResource(Res.string.home_count_in_progress)
-            },
+            text =
+                if (isCompleted) {
+                    stringResource(Res.string.home_count_complete)
+                } else {
+                    stringResource(Res.string.home_count_in_progress)
+                },
             style = HabitsTheme.textStyles.actionLabel,
             color = if (isCompleted) HabitsTheme.colors.success else HabitsTheme.colors.textTertiary,
         )
@@ -371,10 +383,11 @@ private fun StepChip(
     onClick: () -> Unit,
 ) {
     Surface(
-        modifier = Modifier
-            .size(32.dp)
-            .clip(CircleShape)
-            .clickable(onClick = onClick),
+        modifier =
+            Modifier
+                .size(32.dp)
+                .clip(CircleShape)
+                .clickable(onClick = onClick),
         color = HabitsTheme.colors.brandPrimarySoft,
     ) {
         Box(contentAlignment = Alignment.Center) {
@@ -388,16 +401,19 @@ private fun StepChip(
 }
 
 @Composable
-private fun habitSupportingText(progress: HomeHabitProgress): String = when (progress) {
-    is HomeHabitProgress.Binary -> if (progress.isCompleted) {
-        stringResource(Res.string.home_binary_completed_supporting)
-    } else {
-        stringResource(Res.string.home_binary_pending_supporting)
-    }
+private fun habitSupportingText(progress: HomeHabitProgress): String =
+    when (progress) {
+        is HomeHabitProgress.Binary ->
+            if (progress.isCompleted) {
+                stringResource(Res.string.home_binary_completed_supporting)
+            } else {
+                stringResource(Res.string.home_binary_pending_supporting)
+            }
 
-    is HomeHabitProgress.Count -> stringResource(
-        Res.string.home_count_supporting,
-        progress.current,
-        progress.target,
-    )
-}
+        is HomeHabitProgress.Count ->
+            stringResource(
+                Res.string.home_count_supporting,
+                progress.current,
+                progress.target,
+            )
+    }

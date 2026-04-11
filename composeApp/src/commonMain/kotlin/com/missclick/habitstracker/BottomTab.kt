@@ -9,8 +9,9 @@ enum class BottomTab(val root: AppScreen) {
     JOURNAL(JournalRoute),
 }
 
-fun AppScreen.toBottomTabOrNull(): BottomTab? = when (this) {
-    HomeRoute -> BottomTab.HOME
-    JournalRoute -> BottomTab.JOURNAL
-    else -> null
-}
+fun AppScreen.toBottomTabOrNull(): BottomTab? =
+    when (this) {
+        HomeRoute -> BottomTab.HOME
+        JournalRoute -> BottomTab.JOURNAL
+        else -> null
+    }

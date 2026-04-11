@@ -4,14 +4,18 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
 class NavigationResultStore : NavigationResults {
-    private val mutableResults = MutableSharedFlow<NavigationResults.ResultEvent>(
-        replay = 1,
-        extraBufferCapacity = 64,
-    )
+    private val mutableResults =
+        MutableSharedFlow<NavigationResults.ResultEvent>(
+            replay = 1,
+            extraBufferCapacity = 64,
+        )
 
     override val results = mutableResults.asSharedFlow()
 
-    override fun set(key: String, value: Any) {
+    override fun set(
+        key: String,
+        value: Any,
+    ) {
         mutableResults.tryEmit(
             NavigationResults.ResultEvent(
                 key = key,

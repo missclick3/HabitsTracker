@@ -10,7 +10,10 @@ interface NavigationResults {
         val value: Any,
     )
 
-    fun set(key: String, value: Any)
+    fun set(
+        key: String,
+        value: Any,
+    )
 
     fun clear(key: String)
 }

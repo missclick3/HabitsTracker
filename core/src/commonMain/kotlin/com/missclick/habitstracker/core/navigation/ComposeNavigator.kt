@@ -13,11 +13,18 @@ class ComposeNavigator : AppComposeNavigator {
         commands.tryEmit(NavCommand.NavigateAndClear(destination))
     }
 
-    override fun popUpTo(destination: AppScreen, inclusive: Boolean) {
+    override fun popUpTo(
+        destination: AppScreen,
+        inclusive: Boolean,
+    ) {
         commands.tryEmit(NavCommand.PopUpTo(destination, inclusive))
     }
 
-    override fun <T : Any> navigateBackWithResult(key: String, result: T, destination: AppScreen?) {
+    override fun <T : Any> navigateBackWithResult(
+        key: String,
+        result: T,
+        destination: AppScreen?,
+    ) {
         commands.tryEmit(NavCommand.NavigateUpWithResult(key, result, destination))
     }
 

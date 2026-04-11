@@ -10,6 +10,8 @@ plugins {
     alias(libs.plugins.kotlinSerialization) apply false
     alias(libs.plugins.android.kotlin.multiplatform.library) apply false
     alias(libs.plugins.android.lint) apply false
+    alias(libs.plugins.detekt) apply false
+    alias(libs.plugins.ktlint) apply false
 }
 
 val checkNoHardcodedColors by tasks.registering {
@@ -36,8 +38,37 @@ val checkNoHardcodedColors by tasks.registering {
     }
 }
 
+val qualityCheck by tasks.registering {
+    group = "verification"
+    description = "Runs Detekt, Ktlint, Android Lint, and custom quality checks."
+    dependsOn(checkNoHardcodedColors)
+}
+
+val qualityFormat by tasks.registering {
+    group = "formatting"
+    description = "Runs all available auto-formatters."
+}
+
 subprojects {
     tasks.matching { it.name == "check" }.configureEach {
-        dependsOn(rootProject.tasks.named("checkNoHardcodedColors"))
+        dependsOn(rootProject.tasks.named("qualityCheck"))
+    }
+}
+
+gradle.projectsEvaluated {
+    subprojects.forEach { subproject ->
+        listOf("detekt", "ktlintCheck", "lint").forEach { taskName ->
+            subproject.tasks.findByName(taskName)?.let { lintTask ->
+                tasks.named("qualityCheck") {
+                    dependsOn(lintTask)
+                }
+            }
+        }
+
+        subproject.tasks.findByName("ktlintFormat")?.let { formatTask ->
+            tasks.named("qualityFormat") {
+                dependsOn(formatTask)
+            }
+        }
     }
 }

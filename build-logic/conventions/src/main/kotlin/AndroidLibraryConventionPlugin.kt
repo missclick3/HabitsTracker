@@ -8,6 +8,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project): Unit = with(target) {
         val libs = getLibs()
         plugins.apply(libs.findPlugin("androidLibrary").get().get().pluginId)
+        plugins.apply("habitstracker.quality")
 
         extensions.configure<LibraryExtension> {
             compileSdk = libs.findVersion("android-compileSdk").get().requiredVersion.toInt()

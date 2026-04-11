@@ -5,57 +5,61 @@ import com.missclick.habitstracker.core.model.HabitKind
 import com.missclick.habitstracker.core.model.Mood
 import com.missclick.habitstracker.home.impl.domain.repository.HomeHabit
 import com.missclick.habitstracker.home.impl.domain.repository.HomeReflection
-import com.missclick.habitstracker.home.impl.domain.repository.IHomeRepository
 import com.missclick.habitstracker.home.impl.domain.repository.HomeSnapshot
+import com.missclick.habitstracker.home.impl.domain.repository.IHomeRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 internal class InMemoryHomeRepository : IHomeRepository {
-    private val snapshot = MutableStateFlow(
-        HomeSnapshot(
-            dateLabel = "",
-            habits = listOf(
-                HomeHabit(
-                    id = HabitId("hydration"),
-                    title = "Hydration",
-                    kind = HabitKind.Count,
-                    isCompleted = false,
-                    currentCount = 6,
-                    targetCount = 8,
-                ),
-                HomeHabit(
-                    id = HabitId("mindfulness"),
-                    title = "Mindfulness",
-                    kind = HabitKind.Binary,
-                    isCompleted = true,
-                    currentCount = 0,
-                    targetCount = null,
-                ),
+    private val snapshot =
+        MutableStateFlow(
+            HomeSnapshot(
+                dateLabel = "",
+                habits =
+                    listOf(
+                        HomeHabit(
+                            id = HabitId("hydration"),
+                            title = "Hydration",
+                            kind = HabitKind.Count,
+                            isCompleted = false,
+                            currentCount = 6,
+                            targetCount = 8,
+                        ),
+                        HomeHabit(
+                            id = HabitId("mindfulness"),
+                            title = "Mindfulness",
+                            kind = HabitKind.Binary,
+                            isCompleted = true,
+                            currentCount = 0,
+                            targetCount = null,
+                        ),
+                    ),
+                reflection =
+                    HomeReflection(
+                        selectedMood = Mood.Good,
+                        note = "",
+                    ),
             ),
-            reflection = HomeReflection(
-                selectedMood = Mood.Good,
-                note = "",
-            ),
-        ),
-    )
+        )
 
     override fun observeHome(): Flow<HomeSnapshot> = snapshot.asStateFlow()
 
     override suspend fun toggleHabit(habitId: HabitId) {
         snapshot.update { current ->
             current.copy(
-                habits = current.habits.map { habit ->
-                    if (habit.id != habitId || habit.kind != HabitKind.Binary) {
-                        habit
-                    } else {
-                        val nextCompleted = !habit.isCompleted
-                        habit.copy(
-                            isCompleted = nextCompleted,
-                        )
-                    }
-                },
+                habits =
+                    current.habits.map { habit ->
+                        if (habit.id != habitId || habit.kind != HabitKind.Binary) {
+                            habit
+                        } else {
+                            val nextCompleted = !habit.isCompleted
+                            habit.copy(
+                                isCompleted = nextCompleted,
+                            )
+                        }
+                    },
             )
         }
     }
@@ -63,18 +67,19 @@ internal class InMemoryHomeRepository : IHomeRepository {
     override suspend fun incrementHabit(habitId: HabitId) {
         snapshot.update { current ->
             current.copy(
-                habits = current.habits.map { habit ->
-                    if (habit.id != habitId || habit.kind != HabitKind.Count) {
-                        habit
-                    } else {
-                        val target = habit.targetCount ?: return@map habit
-                        val nextCount = (habit.currentCount + 1).coerceAtMost(target)
-                        habit.copy(
-                            currentCount = nextCount,
-                            isCompleted = nextCount >= target,
-                        )
-                    }
-                },
+                habits =
+                    current.habits.map { habit ->
+                        if (habit.id != habitId || habit.kind != HabitKind.Count) {
+                            habit
+                        } else {
+                            val target = habit.targetCount ?: return@map habit
+                            val nextCount = (habit.currentCount + 1).coerceAtMost(target)
+                            habit.copy(
+                                currentCount = nextCount,
+                                isCompleted = nextCount >= target,
+                            )
+                        }
+                    },
             )
         }
     }
@@ -82,18 +87,19 @@ internal class InMemoryHomeRepository : IHomeRepository {
     override suspend fun decrementHabit(habitId: HabitId) {
         snapshot.update { current ->
             current.copy(
-                habits = current.habits.map { habit ->
-                    if (habit.id != habitId || habit.kind != HabitKind.Count) {
-                        habit
-                    } else {
-                        val target = habit.targetCount ?: return@map habit
-                        val nextCount = (habit.currentCount - 1).coerceAtLeast(0)
-                        habit.copy(
-                            currentCount = nextCount,
-                            isCompleted = nextCount >= target,
-                        )
-                    }
-                },
+                habits =
+                    current.habits.map { habit ->
+                        if (habit.id != habitId || habit.kind != HabitKind.Count) {
+                            habit
+                        } else {
+                            val target = habit.targetCount ?: return@map habit
+                            val nextCount = (habit.currentCount - 1).coerceAtLeast(0)
+                            habit.copy(
+                                currentCount = nextCount,
+                                isCompleted = nextCount >= target,
+                            )
+                        }
+                    },
             )
         }
     }

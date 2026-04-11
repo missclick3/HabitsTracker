@@ -31,9 +31,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavBackStack
 import com.missclick.habitstracker.core.design.HabitsTheme
 import com.missclick.habitstracker.core.design.HabitsTrackerTheme
-import androidx.navigation3.runtime.NavBackStack
 import com.missclick.habitstracker.core.navigation.AppComposeNavigator
 import com.missclick.habitstracker.core.navigation.AppScreen
 import com.missclick.habitstracker.core.navigation.JournalRoute
@@ -62,7 +62,9 @@ import org.koin.dsl.koinConfiguration
 
 private sealed interface AppDialog {
     data object CreateHabit : AppDialog
+
     data object Archive : AppDialog
+
     data class EditHabit(val habitId: String) : AppDialog
 }
 
@@ -70,14 +72,15 @@ private sealed interface AppDialog {
 @Preview
 fun App() {
     KoinApplication(
-        configuration = koinConfiguration(
-            declaration = {
-                modules(
-                    navigationModule,
-                    homeFeatureModule,
-                )
-            },
-        ),
+        configuration =
+            koinConfiguration(
+                declaration = {
+                    modules(
+                        navigationModule,
+                        homeFeatureModule,
+                    )
+                },
+            ),
         content = {
             val homeFeature: HomeFeatureApi = koinInject()
             val navigator: AppComposeNavigator = koinInject()
@@ -102,10 +105,11 @@ fun App() {
                         AppBottomBar(
                             selectedTab = selectedTab,
                             onTabSelected = { tab ->
-                                val route = when (tab) {
-                                    BottomTab.HOME -> HomeRoute
-                                    BottomTab.JOURNAL -> JournalRoute
-                                }
+                                val route =
+                                    when (tab) {
+                                        BottomTab.HOME -> HomeRoute
+                                        BottomTab.JOURNAL -> JournalRoute
+                                    }
                                 val hasRoot = backStack.any { key -> key == route }
                                 when {
                                     selectedTab == tab -> navigator.popUpTo(route, inclusive = false)
@@ -119,28 +123,33 @@ fun App() {
                 ) { padding ->
                     val route = backStack.lastOrNull() ?: HomeRoute
                     when (route) {
-                        HomeRoute -> homeFeature.Screen(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(padding)
-                                .background(HabitsTheme.colors.background),
-                            callbacks = HomeCallbacks(
-                                onOpenArchive = { dialog = AppDialog.Archive },
-                                onOpenCreateHabit = { dialog = AppDialog.CreateHabit },
-                                onOpenEditHabit = { habitId ->
-                                    dialog = AppDialog.EditHabit(habitId.value)
-                                },
-                            ),
-                        )
+                        HomeRoute ->
+                            homeFeature.Screen(
+                                modifier =
+                                    Modifier
+                                        .fillMaxSize()
+                                        .padding(padding)
+                                        .background(HabitsTheme.colors.background),
+                                callbacks =
+                                    HomeCallbacks(
+                                        onOpenArchive = { dialog = AppDialog.Archive },
+                                        onOpenCreateHabit = { dialog = AppDialog.CreateHabit },
+                                        onOpenEditHabit = { habitId ->
+                                            dialog = AppDialog.EditHabit(habitId.value)
+                                        },
+                                    ),
+                            )
 
-                        JournalRoute -> PlaceholderScreen(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(padding)
-                                .background(HabitsTheme.colors.background),
-                            title = stringResource(Res.string.app_journal_placeholder_title),
-                            body = stringResource(Res.string.app_journal_placeholder_body),
-                        )
+                        JournalRoute ->
+                            PlaceholderScreen(
+                                modifier =
+                                    Modifier
+                                        .fillMaxSize()
+                                        .padding(padding)
+                                        .background(HabitsTheme.colors.background),
+                                title = stringResource(Res.string.app_journal_placeholder_title),
+                                body = stringResource(Res.string.app_journal_placeholder_body),
+                            )
                     }
                 }
 
@@ -160,22 +169,25 @@ private fun AppBottomBar(
     onAddClicked: () -> Unit,
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(104.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(104.dp),
     ) {
         Surface(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter),
             shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
             shadowElevation = 18.dp,
             color = HabitsTheme.colors.surface,
         ) {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 28.dp, vertical = 18.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 28.dp, vertical = 18.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -194,11 +206,12 @@ private fun AppBottomBar(
         }
 
         Surface(
-            modifier = Modifier
-                .size(72.dp)
-                .align(Alignment.TopCenter)
-                .clip(CircleShape)
-                .clickable(onClick = onAddClicked),
+            modifier =
+                Modifier
+                    .size(72.dp)
+                    .align(Alignment.TopCenter)
+                    .clip(CircleShape)
+                    .clickable(onClick = onAddClicked),
             shape = CircleShape,
             color = HabitsTheme.colors.brandPrimary,
             shadowElevation = 16.dp,
@@ -244,9 +257,10 @@ private fun PlaceholderScreen(
     body: String,
 ) {
     Box(
-        modifier = modifier
-            .background(HabitsTheme.colors.background)
-            .padding(24.dp),
+        modifier =
+            modifier
+                .background(HabitsTheme.colors.background)
+                .padding(24.dp),
         contentAlignment = Alignment.Center,
     ) {
         Column(
@@ -278,14 +292,18 @@ private fun PlaceholderDialog(
         return
     }
 
-    val (title, message) = when (dialog) {
-        AppDialog.Archive -> stringResource(Res.string.app_dialog_archive_title) to
-            stringResource(Res.string.app_dialog_archive_body)
-        AppDialog.CreateHabit -> stringResource(Res.string.app_dialog_create_title) to
-            stringResource(Res.string.app_dialog_create_body)
-        is AppDialog.EditHabit -> stringResource(Res.string.app_dialog_edit_title) to
-            stringResource(Res.string.app_dialog_edit_body, dialog.habitId)
-    }
+    val (title, message) =
+        when (dialog) {
+            AppDialog.Archive ->
+                stringResource(Res.string.app_dialog_archive_title) to
+                    stringResource(Res.string.app_dialog_archive_body)
+            AppDialog.CreateHabit ->
+                stringResource(Res.string.app_dialog_create_title) to
+                    stringResource(Res.string.app_dialog_create_body)
+            is AppDialog.EditHabit ->
+                stringResource(Res.string.app_dialog_edit_title) to
+                    stringResource(Res.string.app_dialog_edit_body, dialog.habitId)
+        }
 
     AlertDialog(
         onDismissRequest = onDismiss,

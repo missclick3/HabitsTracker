@@ -6,13 +6,21 @@ import com.missclick.habitstracker.core.utils.StringUtils.EMPTY_STRING
 
 internal sealed interface HomeIntent {
     data object Load : HomeIntent
+
     data object ArchiveClicked : HomeIntent
+
     data object CreateHabitClicked : HomeIntent
+
     data class HabitClicked(val habitId: HabitId) : HomeIntent
+
     data class ToggleHabit(val habitId: HabitId) : HomeIntent
+
     data class IncrementHabit(val habitId: HabitId) : HomeIntent
+
     data class DecrementHabit(val habitId: HabitId) : HomeIntent
+
     data class MoodSelected(val mood: Mood) : HomeIntent
+
     data class ReflectionNoteChanged(val text: String) : HomeIntent
 }
 
@@ -24,13 +32,14 @@ internal data class HomeState(
     val isLoading: Boolean,
 ) {
     companion object {
-        fun default() = HomeState(
-            dateLabel = EMPTY_STRING,
-            habits = emptyList(),
-            reflection = ReflectionUiState(),
-            isEmpty = true,
-            isLoading = true,
-        )
+        fun default() =
+            HomeState(
+                dateLabel = EMPTY_STRING,
+                habits = emptyList(),
+                reflection = ReflectionUiState(),
+                isEmpty = true,
+                isLoading = true,
+            )
     }
 }
 
@@ -57,6 +66,8 @@ internal data class ReflectionUiState(
 
 internal sealed interface HomeEffect {
     data object OpenArchive : HomeEffect
+
     data object OpenCreateHabit : HomeEffect
+
     data class OpenEditHabit(val habitId: HabitId) : HomeEffect
 }

@@ -7,9 +7,10 @@ import kotlinx.datetime.toNSDate
 import platform.Foundation.NSDateFormatter
 
 internal actual class LocaleDateFormatter {
-    private val formatter = NSDateFormatter().apply {
-        dateFormat = DATE_PATTERN
-    }
+    private val formatter =
+        NSDateFormatter().apply {
+            dateFormat = DATE_PATTERN
+        }
 
     actual fun format(date: LocalDate): String {
         val startOfDay = date.atStartOfDayIn(TimeZone.currentSystemDefault())

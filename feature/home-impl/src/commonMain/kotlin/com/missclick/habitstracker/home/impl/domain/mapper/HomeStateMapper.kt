@@ -13,10 +13,11 @@ internal class HomeStateMapper {
         HomeState(
             dateLabel = snapshot.dateLabel,
             habits = snapshot.habits.map(::mapHabit),
-            reflection = ReflectionUiState(
-                selectedMood = snapshot.reflection.selectedMood,
-                note = snapshot.reflection.note,
-            ),
+            reflection =
+                ReflectionUiState(
+                    selectedMood = snapshot.reflection.selectedMood,
+                    note = snapshot.reflection.note,
+                ),
             isEmpty = snapshot.habits.isEmpty(),
             isLoading = false,
         )
@@ -25,13 +26,15 @@ internal class HomeStateMapper {
         HomeHabitItem(
             id = habit.id,
             title = habit.title,
-            progress = when (habit.kind) {
-                HabitKind.Binary -> HomeHabitProgress.Binary(habit.isCompleted)
-                HabitKind.Count -> HomeHabitProgress.Count(
-                    current = habit.currentCount,
-                    target = habit.targetCount ?: 0,
-                    isCompleted = habit.isCompleted,
-                )
-            },
+            progress =
+                when (habit.kind) {
+                    HabitKind.Binary -> HomeHabitProgress.Binary(habit.isCompleted)
+                    HabitKind.Count ->
+                        HomeHabitProgress.Count(
+                            current = habit.currentCount,
+                            target = habit.targetCount ?: 0,
+                            isCompleted = habit.isCompleted,
+                        )
+                },
         )
 }

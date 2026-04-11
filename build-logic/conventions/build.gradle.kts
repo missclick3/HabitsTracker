@@ -8,6 +8,8 @@ dependencies {
     compileOnly(libs.compose.gradlePlugin)
     compileOnly(libs.compose.compiler.gradlePlugin)
     compileOnly(libs.compose.hotReload.gradlePlugin)
+    compileOnly(libs.detekt.gradlePlugin)
+    compileOnly(libs.ktlint.gradlePlugin)
 }
 
 tasks {
@@ -37,6 +39,11 @@ gradlePlugin {
         register("feature") {
             id = "habitstracker.feature"
             implementationClass = "FeatureConventionPlugin"
+        }
+
+        register("quality") {
+            id = "habitstracker.quality"
+            implementationClass = "QualityConventionPlugin"
         }
     }
 }

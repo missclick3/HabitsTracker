@@ -5,7 +5,10 @@ interface AppComposeNavigator {
 
     fun navigateAndClearBackStack(destination: AppScreen)
 
-    fun popUpTo(destination: AppScreen, inclusive: Boolean = false)
+    fun popUpTo(
+        destination: AppScreen,
+        inclusive: Boolean = false,
+    )
 
     fun <T : Any> navigateBackWithResult(
         key: String,

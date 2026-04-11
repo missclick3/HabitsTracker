@@ -20,9 +20,6 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.todayIn
-import kotlin.time.Clock
 
 internal class HomeViewModel(
     private val observeHome: ObserveHomeUseCase,
@@ -62,10 +59,11 @@ internal class HomeViewModel(
                     current.copy(reflection = current.reflection.copy(note = intent.text))
                 }
                 noteSaveJob?.cancel()
-                noteSaveJob = launch {
-                    delay(NOTE_AUTOSAVE_DELAY_MS)
-                    updateReflectionNote(intent.text)
-                }
+                noteSaveJob =
+                    launch {
+                        delay(NOTE_AUTOSAVE_DELAY_MS)
+                        updateReflectionNote(intent.text)
+                    }
             }
         }
     }
@@ -81,13 +79,15 @@ internal class HomeViewModel(
             return
         }
 
-        observeJob = launch {
-            observeHome().collect { homeState ->
-                mutableState.value = homeState.copy(
-                    dateLabel = getTodayDateLabelUseCase()
-                )
+        observeJob =
+            launch {
+                observeHome().collect { homeState ->
+                    mutableState.value =
+                        homeState.copy(
+                            dateLabel = getTodayDateLabelUseCase(),
+                        )
+                }
             }
-        }
     }
 
     private fun emitEffect(effect: HomeEffect) {

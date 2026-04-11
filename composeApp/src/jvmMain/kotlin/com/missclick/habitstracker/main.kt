@@ -7,11 +7,12 @@ import habitstracker.composeapp.generated.resources.app_name
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.compose.resources.getString
 
-fun main() = application {
-    Window(
-        onCloseRequest = ::exitApplication,
-        title = runBlocking { getString(Res.string.app_name) },
-    ) {
-        App()
+fun main() =
+    application {
+        Window(
+            onCloseRequest = ::exitApplication,
+            title = runBlocking { getString(Res.string.app_name) },
+        ) {
+            App()
+        }
     }
-}

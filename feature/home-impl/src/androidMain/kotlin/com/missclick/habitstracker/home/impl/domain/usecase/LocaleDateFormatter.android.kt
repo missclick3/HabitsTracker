@@ -1,14 +1,21 @@
 package com.missclick.habitstracker.home.impl.domain.usecase
 
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.toJavaLocalDate
-import java.time.format.DateTimeFormatter
+import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Locale
 
 internal actual class LocaleDateFormatter {
-    private val formatter = DateTimeFormatter.ofPattern(DATE_PATTERN, Locale.getDefault())
+    actual fun format(date: LocalDate): String {
+        val calendar =
+            Calendar.getInstance().apply {
+                clear()
+                set(date.year, date.month.ordinal, date.day)
+            }
 
-    actual fun format(date: LocalDate): String = date.toJavaLocalDate().format(formatter)
+        val formatter = SimpleDateFormat(DATE_PATTERN, Locale.getDefault())
+        return formatter.format(calendar.time)
+    }
 
     private companion object {
         const val DATE_PATTERN = "EEEE, MMM d"

@@ -26,7 +26,7 @@ internal fun HabitsBlock(
 ) {
     LazyRow(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         if (habits.isEmpty()) {
             item { EmptyHabitCard(onChooseHabit) }
@@ -52,16 +52,13 @@ private fun HabitCard(
     onDecrement: (HabitId) -> Unit,
     onOpenEdit: (HabitId) -> Unit,
 ) = Box(
-    modifier = Modifier
-        .background(color = HabitsTheme.colors.onBrand, shape = RoundedCornerShape(28.dp))
-        .clickable(onClick = { onOpenEdit(habit.id) })
+    modifier =
+        Modifier
+            .background(color = HabitsTheme.colors.onBrand, shape = RoundedCornerShape(28.dp))
+            .clickable(onClick = { onOpenEdit(habit.id) }),
 ) {
-
 }
 
 @Composable
-private fun EmptyHabitCard(
-    onChooseHabit: () -> Unit
-) {
-
+private fun EmptyHabitCard(onChooseHabit: () -> Unit) {
 }
