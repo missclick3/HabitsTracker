@@ -150,7 +150,7 @@ Run `./gradlew qualityCheck` before committing.
 | # | Severity | Area | Fix effort |
 |---|----------|------|------------|
 | ~~1~~ | ~~Critical~~ | ~~DI — `HomeFeatureModule` is nearly empty; use cases and ViewModel are created manually with `remember()` instead of being registered in Koin~~ | ~~Done~~ |
-| 2 | Critical | ViewModel coroutine scope leaks — manual `CoroutineScope` + `DisposableEffect(clear)` is fragile; switch to `viewModelScope` after fixing #1 | Small |
+| ~~2~~ | ~~Critical~~ | ~~ViewModel coroutine scope leaks — manual `CoroutineScope` + `DisposableEffect(clear)` is fragile; switch to `viewModelScope` after fixing #1~~ | ~~Done~~ |
 | 3 | Critical | MVI race condition — optimistic state update in `MoodSelected` runs before async repository save; drive state only from the `observeHome` flow | Small |
 | 4 | Critical | Hardcoded username `"Alex Sterling"` in `HomeScreen.kt:72` — must come from a `UserRepository` and flow through `HomeState` | Medium |
 | 5 | Major | `LocaleDateFormatter` not injected — `GetTodayDateLabelUseCase` constructs it via default parameter, bypassing Koin; inject as singleton | Small |
