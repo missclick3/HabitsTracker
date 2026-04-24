@@ -16,6 +16,10 @@ class FeatureConventionPlugin : Plugin<Project> {
             )
             dependencies.add(
                 "commonMainImplementation",
+                libs.findLibrary("koin.compose.viewmodel").get().get()
+            )
+            dependencies.add(
+                "commonMainImplementation",
                 libs.findLibrary("kotlinx.coroutines.core").get().get()
             )
             dependencies.add(

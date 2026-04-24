@@ -6,8 +6,8 @@ import kotlinx.datetime.todayIn
 import kotlin.time.Clock
 
 internal class GetTodayDateLabelUseCase(
-    private val dateProvider: DateProvider = SystemDateProvider(),
-    private val dateFormatter: LocaleDateFormatter = LocaleDateFormatter(),
+    private val dateProvider: DateProvider,
+    private val dateFormatter: LocaleDateFormatter,
 ) {
     operator fun invoke(): String = dateFormatter.format(dateProvider.today())
 }

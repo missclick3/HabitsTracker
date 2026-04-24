@@ -1,5 +1,7 @@
 package com.missclick.habitstracker.home.impl.presenter
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.missclick.habitstracker.home.impl.domain.usecase.DecrementHabitUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.GetTodayDateLabelUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.IncrementHabitUseCase
@@ -8,9 +10,7 @@ import com.missclick.habitstracker.home.impl.domain.usecase.ToggleHabitUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.UpdateReflectionMoodUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.UpdateReflectionNoteUseCase
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,8 +29,7 @@ internal class HomeViewModel(
     private val updateReflectionMood: UpdateReflectionMoodUseCase,
     private val updateReflectionNote: UpdateReflectionNoteUseCase,
     private val getTodayDateLabelUseCase: GetTodayDateLabelUseCase,
-) {
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+) : ViewModel() {
     private val mutableState = MutableStateFlow(HomeState.default())
     private val mutableEffects = MutableSharedFlow<HomeEffect>()
     private var observeJob: Job? = null
@@ -68,12 +67,6 @@ internal class HomeViewModel(
         }
     }
 
-    fun clear() {
-        noteSaveJob?.cancel()
-        observeJob?.cancel()
-        scope.coroutineContext[Job]?.cancel()
-    }
-
     private fun load() {
         if (observeJob != null) {
             return
@@ -96,7 +89,7 @@ internal class HomeViewModel(
         }
     }
 
-    private fun launch(block: suspend CoroutineScope.() -> Unit): Job = scope.launch(block = block)
+    private fun launch(block: suspend CoroutineScope.() -> Unit): Job = viewModelScope.launch(block = block)
 
     private companion object {
         const val NOTE_AUTOSAVE_DELAY_MS = 500L
