@@ -30,10 +30,10 @@ import androidx.compose.ui.unit.dp
 import com.missclick.habitstracker.core.design.HabitsTheme
 import com.missclick.habitstracker.core.model.HabitId
 import com.missclick.habitstracker.core.utils.StringUtils.EMPTY_STRING
-import com.missclick.habitstracker.home.impl.presenter.HomeHabitItem
-import com.missclick.habitstracker.home.impl.presenter.HomeHabitProgress
-import com.missclick.habitstracker.home.impl.presenter.HomeIntent
-import com.missclick.habitstracker.home.impl.presenter.HomeState
+import com.missclick.habitstracker.home.impl.presenter.mainScreen.HomeHabitItem
+import com.missclick.habitstracker.home.impl.presenter.mainScreen.HomeHabitProgress
+import com.missclick.habitstracker.home.impl.presenter.mainScreen.HomeIntent
+import com.missclick.habitstracker.home.impl.presenter.mainScreen.HomeState
 import com.missclick.habitstracker.home.impl.ui.components.HeaderBlock
 import com.missclick.habitstracker.home.impl.ui.components.ReflectionsBlock
 import habitstracker.home_impl.generated.resources.Res

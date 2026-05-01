@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.missclick.habitstracker.core.design.HabitsTheme
 import com.missclick.habitstracker.core.model.HabitId
-import com.missclick.habitstracker.home.impl.presenter.HomeHabitItem
+import com.missclick.habitstracker.home.impl.presenter.mainScreen.HomeHabitItem
 
 @Composable
 internal fun HabitsBlock(

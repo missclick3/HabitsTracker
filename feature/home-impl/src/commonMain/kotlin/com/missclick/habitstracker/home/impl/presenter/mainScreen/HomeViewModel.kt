@@ -1,4 +1,4 @@
-package com.missclick.habitstracker.home.impl.presenter
+package com.missclick.habitstracker.home.impl.presenter.mainScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

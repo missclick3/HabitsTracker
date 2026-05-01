@@ -14,87 +14,52 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.runtime.NavBackStack
 import com.missclick.habitstracker.core.design.HabitsTheme
 import com.missclick.habitstracker.core.design.HabitsTrackerTheme
-import com.missclick.habitstracker.core.navigation.AppComposeNavigator
-import com.missclick.habitstracker.core.navigation.AppScreen
-import com.missclick.habitstracker.core.navigation.JournalRoute
-import com.missclick.habitstracker.core.navigation.NavigationResults
-import com.missclick.habitstracker.core.navigation.navigationModule
-import com.missclick.habitstracker.home.api.HomeCallbacks
-import com.missclick.habitstracker.home.api.HomeFeatureApi
-import com.missclick.habitstracker.home.api.HomeRoute
+import com.missclick.habitstracker.core.navigation.FeatureEntryBuilder
+import com.missclick.habitstracker.core.navigation.Navigator
+import com.missclick.habitstracker.core.navigation.createNavigator
+import com.missclick.habitstracker.home.api.HomeScreenRoute
 import com.missclick.habitstracker.home.impl.di.homeFeatureModule
 import habitstracker.composeapp.generated.resources.Res
 import habitstracker.composeapp.generated.resources.app_bottom_home
 import habitstracker.composeapp.generated.resources.app_bottom_journal
-import habitstracker.composeapp.generated.resources.app_dialog_archive_body
-import habitstracker.composeapp.generated.resources.app_dialog_archive_title
-import habitstracker.composeapp.generated.resources.app_dialog_close
-import habitstracker.composeapp.generated.resources.app_dialog_create_body
-import habitstracker.composeapp.generated.resources.app_dialog_create_title
-import habitstracker.composeapp.generated.resources.app_dialog_edit_body
-import habitstracker.composeapp.generated.resources.app_dialog_edit_title
 import habitstracker.composeapp.generated.resources.app_journal_placeholder_body
 import habitstracker.composeapp.generated.resources.app_journal_placeholder_title
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.KoinApplication
+import org.koin.compose.getKoin
 import org.koin.compose.koinInject
 import org.koin.dsl.koinConfiguration
-
-private sealed interface AppDialog {
-    data object CreateHabit : AppDialog
-
-    data object Archive : AppDialog
-
-    data class EditHabit(val habitId: String) : AppDialog
-}
+import org.koin.dsl.module
 
 @Composable
 @Preview
 fun App() {
+    val configuration =
+        koinConfiguration {
+            modules(
+                module { single<Navigator> { createNavigator(start = HomeScreenRoute.HomeScreen) } },
+                homeFeatureModule,
+            )
+        }
+
     KoinApplication(
-        configuration =
-            koinConfiguration(
-                declaration = {
-                    modules(
-                        navigationModule,
-                        homeFeatureModule,
-                    )
-                },
-            ),
+        configuration = configuration,
         content = {
-            val homeFeature: HomeFeatureApi = koinInject()
-            val navigator: AppComposeNavigator = koinInject()
-            val results: NavigationResults = koinInject()
-            val backStack = remember { NavBackStack<AppScreen>(HomeRoute) }
-            var dialog by remember { mutableStateOf<AppDialog?>(null) }
-
-            LaunchedEffect(navigator, results) {
-                navigator.bind(
-                    backStack = backStack,
-                    results = results,
-                )
-            }
-
+            val navigator: Navigator = koinInject()
+            val builders: List<FeatureEntryBuilder> = getKoin().getAll()
+            val backStack = navigator.backStack
             val selectedTab = backStack.lastOrNull()?.toBottomTabOrNull() ?: BottomTab.HOME
 
             HabitsTrackerTheme {
@@ -105,58 +70,40 @@ fun App() {
                         AppBottomBar(
                             selectedTab = selectedTab,
                             onTabSelected = { tab ->
-                                val route =
-                                    when (tab) {
-                                        BottomTab.HOME -> HomeRoute
-                                        BottomTab.JOURNAL -> JournalRoute
-                                    }
-                                val hasRoot = backStack.any { key -> key == route }
+                                val route = tab.toRoute()
+                                val hasRoot = backStack.any { it == route }
                                 when {
-                                    selectedTab == tab -> navigator.popUpTo(route, inclusive = false)
-                                    hasRoot -> navigator.popUpTo(route, inclusive = false)
+                                    selectedTab == tab -> navigator.popUpTo { it == route }
+                                    hasRoot -> navigator.popUpTo { it == route }
                                     else -> navigator.navigate(route)
                                 }
                             },
-                            onAddClicked = { dialog = AppDialog.CreateHabit },
+                            onAddClicked = {},
                         )
                     },
                 ) { padding ->
-                    val route = backStack.lastOrNull() ?: HomeRoute
-                    when (route) {
-                        HomeRoute ->
-                            homeFeature.Screen(
-                                modifier =
-                                    Modifier
-                                        .fillMaxSize()
-                                        .padding(padding)
-                                        .background(HabitsTheme.colors.background),
-                                callbacks =
-                                    HomeCallbacks(
-                                        onOpenArchive = { dialog = AppDialog.Archive },
-                                        onOpenCreateHabit = { dialog = AppDialog.CreateHabit },
-                                        onOpenEditHabit = { habitId ->
-                                            dialog = AppDialog.EditHabit(habitId.value)
-                                        },
-                                    ),
-                            )
-
-                        JournalRoute ->
+                    val journalEntry: FeatureEntryBuilder = {
+                        entry<JournalRoute> { _ ->
                             PlaceholderScreen(
                                 modifier =
                                     Modifier
                                         .fillMaxSize()
-                                        .padding(padding)
                                         .background(HabitsTheme.colors.background),
                                 title = stringResource(Res.string.app_journal_placeholder_title),
                                 body = stringResource(Res.string.app_journal_placeholder_body),
                             )
+                        }
                     }
+                    AppNavHost(
+                        modifier =
+                            Modifier
+                                .fillMaxSize()
+                                .padding(padding),
+                        backStack = backStack,
+                        onBack = { navigator.back() },
+                        builders = builders + journalEntry,
+                    )
                 }
-
-                PlaceholderDialog(
-                    dialog = dialog,
-                    onDismiss = { dialog = null },
-                )
             }
         },
     )
@@ -281,54 +228,4 @@ private fun PlaceholderScreen(
             )
         }
     }
-}
-
-@Composable
-private fun PlaceholderDialog(
-    dialog: AppDialog?,
-    onDismiss: () -> Unit,
-) {
-    if (dialog == null) {
-        return
-    }
-
-    val (title, message) =
-        when (dialog) {
-            AppDialog.Archive ->
-                stringResource(Res.string.app_dialog_archive_title) to
-                    stringResource(Res.string.app_dialog_archive_body)
-            AppDialog.CreateHabit ->
-                stringResource(Res.string.app_dialog_create_title) to
-                    stringResource(Res.string.app_dialog_create_body)
-            is AppDialog.EditHabit ->
-                stringResource(Res.string.app_dialog_edit_title) to
-                    stringResource(Res.string.app_dialog_edit_body, dialog.habitId)
-        }
-
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = {
-            Text(
-                text = title,
-                style = HabitsTheme.textStyles.cardTitle,
-                color = HabitsTheme.colors.textPrimary,
-            )
-        },
-        text = {
-            Text(
-                text = message,
-                style = HabitsTheme.textStyles.bodyText,
-                color = HabitsTheme.colors.textMuted,
-            )
-        },
-        confirmButton = {
-            TextButton(onClick = onDismiss) {
-                Text(
-                    text = stringResource(Res.string.app_dialog_close),
-                    style = HabitsTheme.textStyles.buttonLabel,
-                    color = HabitsTheme.colors.brandPrimary,
-                )
-            }
-        },
-    )
 }

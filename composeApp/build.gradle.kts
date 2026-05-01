@@ -15,6 +15,10 @@ kotlin {
             implementation(libs.koin.compose)
         }
 
+        androidMain.dependencies {
+            implementation(libs.androidx.navigation3.ui)
+        }
+
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)

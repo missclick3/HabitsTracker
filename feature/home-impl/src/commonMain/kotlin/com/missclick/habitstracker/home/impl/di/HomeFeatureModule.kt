@@ -1,6 +1,6 @@
 package com.missclick.habitstracker.home.impl.di
 
-import com.missclick.habitstracker.home.api.HomeFeatureApi
+import com.missclick.habitstracker.core.navigation.FeatureEntryBuilder
 import com.missclick.habitstracker.home.impl.data.repository.InMemoryHomeRepository
 import com.missclick.habitstracker.home.impl.domain.mapper.HomeStateMapper
 import com.missclick.habitstracker.home.impl.domain.repository.IHomeRepository
@@ -14,10 +14,11 @@ import com.missclick.habitstracker.home.impl.domain.usecase.SystemDateProvider
 import com.missclick.habitstracker.home.impl.domain.usecase.ToggleHabitUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.UpdateReflectionMoodUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.UpdateReflectionNoteUseCase
-import com.missclick.habitstracker.home.impl.navigation.HomeFeatureImpl
-import com.missclick.habitstracker.home.impl.presenter.HomeViewModel
+import com.missclick.habitstracker.home.impl.navigation.homeEntries
+import com.missclick.habitstracker.home.impl.presenter.mainScreen.HomeViewModel
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val homeFeatureModule: Module =
@@ -34,5 +35,8 @@ val homeFeatureModule: Module =
         single { UpdateReflectionNoteUseCase(get()) }
         single { GetTodayDateLabelUseCase(get(), get()) }
         viewModel { HomeViewModel(get(), get(), get(), get(), get(), get(), get()) }
-        single<HomeFeatureApi> { HomeFeatureImpl() }
+
+        single<FeatureEntryBuilder>(qualifier = named("home")) {
+            { homeEntries() }
+        }
     }

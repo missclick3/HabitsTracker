@@ -1,17 +1,22 @@
 package com.missclick.habitstracker
 
-import com.missclick.habitstracker.core.navigation.AppScreen
-import com.missclick.habitstracker.core.navigation.JournalRoute
-import com.missclick.habitstracker.home.api.HomeRoute
+import androidx.navigation3.runtime.NavKey
+import com.missclick.habitstracker.home.api.HomeScreenRoute
 
-enum class BottomTab(val root: AppScreen) {
-    HOME(HomeRoute),
-    JOURNAL(JournalRoute),
+enum class BottomTab {
+    HOME,
+    JOURNAL,
 }
 
-fun AppScreen.toBottomTabOrNull(): BottomTab? =
+fun NavKey.toBottomTabOrNull(): BottomTab? =
     when (this) {
-        HomeRoute -> BottomTab.HOME
+        HomeScreenRoute.HomeScreen -> BottomTab.HOME
         JournalRoute -> BottomTab.JOURNAL
         else -> null
+    }
+
+fun BottomTab.toRoute(): NavKey =
+    when (this) {
+        BottomTab.HOME -> HomeScreenRoute.HomeScreen
+        BottomTab.JOURNAL -> JournalRoute
     }

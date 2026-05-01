@@ -3,10 +3,10 @@ package com.missclick.habitstracker.home.impl.domain.mapper
 import com.missclick.habitstracker.core.model.HabitKind
 import com.missclick.habitstracker.home.impl.domain.repository.HomeHabit
 import com.missclick.habitstracker.home.impl.domain.repository.HomeSnapshot
-import com.missclick.habitstracker.home.impl.presenter.HomeHabitItem
-import com.missclick.habitstracker.home.impl.presenter.HomeHabitProgress
-import com.missclick.habitstracker.home.impl.presenter.HomeState
-import com.missclick.habitstracker.home.impl.presenter.ReflectionUiState
+import com.missclick.habitstracker.home.impl.presenter.mainScreen.HomeHabitItem
+import com.missclick.habitstracker.home.impl.presenter.mainScreen.HomeHabitProgress
+import com.missclick.habitstracker.home.impl.presenter.mainScreen.HomeState
+import com.missclick.habitstracker.home.impl.presenter.mainScreen.ReflectionUiState
 
 internal class HomeStateMapper {
     fun map(snapshot: HomeSnapshot): HomeState =

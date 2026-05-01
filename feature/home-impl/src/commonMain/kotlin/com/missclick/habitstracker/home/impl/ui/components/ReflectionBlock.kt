@@ -26,7 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.missclick.habitstracker.core.design.HabitsTheme
 import com.missclick.habitstracker.core.model.Mood
-import com.missclick.habitstracker.home.impl.presenter.ReflectionUiState
+import com.missclick.habitstracker.home.impl.presenter.mainScreen.ReflectionUiState
 import habitstracker.core.generated.resources.mood_drained
 import habitstracker.core.generated.resources.mood_good
 import habitstracker.core.generated.resources.mood_great

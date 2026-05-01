@@ -1,4 +1,4 @@
-package com.missclick.habitstracker.home.impl.presenter
+package com.missclick.habitstracker.home.impl.presenter.mainScreen
 
 import com.missclick.habitstracker.core.model.HabitId
 import com.missclick.habitstracker.core.model.Mood
