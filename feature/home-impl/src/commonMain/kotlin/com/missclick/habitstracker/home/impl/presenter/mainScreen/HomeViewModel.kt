@@ -2,6 +2,7 @@ package com.missclick.habitstracker.home.impl.presenter.mainScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.missclick.habitstracker.core.navigation.Navigator
 import com.missclick.habitstracker.home.impl.domain.usecase.DecrementHabitUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.GetTodayDateLabelUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.IncrementHabitUseCase
@@ -29,6 +30,7 @@ internal class HomeViewModel(
     private val updateReflectionMood: UpdateReflectionMoodUseCase,
     private val updateReflectionNote: UpdateReflectionNoteUseCase,
     private val getTodayDateLabelUseCase: GetTodayDateLabelUseCase,
+    private val navigator: Navigator,
 ) : ViewModel() {
     private val mutableState = MutableStateFlow(HomeState.default())
     private val mutableEffects = MutableSharedFlow<HomeEffect>()

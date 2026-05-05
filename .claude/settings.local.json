@@ -4,7 +4,10 @@
       "Bash(git checkout *)",
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
-      "Bash(jar tf *)"
+      "Bash(jar tf *)",
+      "Read(//c/Users/missclick/Downloads/**)",
+      "Bash(powershell -Command ' *)",
+      "PowerShell(xargs grep *)"
     ]
   }
 }

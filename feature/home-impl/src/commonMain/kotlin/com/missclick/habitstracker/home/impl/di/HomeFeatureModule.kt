@@ -34,7 +34,7 @@ val homeFeatureModule: Module =
         single { UpdateReflectionMoodUseCase(get()) }
         single { UpdateReflectionNoteUseCase(get()) }
         single { GetTodayDateLabelUseCase(get(), get()) }
-        viewModel { HomeViewModel(get(), get(), get(), get(), get(), get(), get()) }
+        viewModel { HomeViewModel(get(), get(), get(), get(), get(), get(), get(), get()) }
 
         single<FeatureEntryBuilder>(qualifier = named("home")) {
             { homeEntries() }

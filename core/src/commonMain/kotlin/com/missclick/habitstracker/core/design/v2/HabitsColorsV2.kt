@@ -1,0 +1,77 @@
+package com.missclick.habitstracker.core.design.v2
+
+import androidx.compose.runtime.Immutable
+import androidx.compose.ui.graphics.Color
+
+@Immutable
+data class HabitsColorsV2(
+    val background: Color,
+    val surface: Color,
+    val surfaceAlt: Color,
+    val text: Color,
+    val textMuted: Color,
+    val textFaint: Color,
+    val border: Color,
+    val accent: Color,
+    val accentSoft: Color,
+    val onAccent: Color,
+    val moodAwful: Color,
+    val moodBad: Color,
+    val moodOkay: Color,
+    val moodGood: Color,
+    val moodGreat: Color,
+    val heatmap0: Color,
+    val heatmap1: Color,
+    val heatmap2: Color,
+    val heatmap3: Color,
+    val heatmap4: Color,
+    val danger: Color,
+)
+
+val HabitsCozyLightColors = HabitsColorsV2(
+    background = Color(0xFFF5EDE0),
+    surface = Color(0xFFFFFAF2),
+    surfaceAlt = Color(0xFFEBDFC8),
+    text = Color(0xFF2A1D12),
+    textMuted = Color(0xFF8A6F52),
+    textFaint = Color(0xFFC4A886),
+    border = Color(0x144A2D14), // rgba(74,45,20,0.08)
+    accent = Color(0xFFC66A3D),
+    accentSoft = Color(0xFFF5D9C4),
+    onAccent = Color.White,
+    moodAwful = Color(0xFFD94747),
+    moodBad = Color(0xFFE88A3C),
+    moodOkay = Color(0xFFE8C547),
+    moodGood = Color(0xFF7EC050),
+    moodGreat = Color(0xFF3CB89C),
+    heatmap0 = Color(0xFFE8DCC4),
+    heatmap1 = Color(0xFFF4D77A),
+    heatmap2 = Color(0xFFE8A93C),
+    heatmap3 = Color(0xFFB8A05C),
+    heatmap4 = Color(0xFF6B8A3C),
+    danger = Color(0xFFC0392B),
+)
+
+val HabitsCozyDarkColors = HabitsColorsV2(
+    background = Color(0xFF1A110A),
+    surface = Color(0xFF231810),
+    surfaceAlt = Color(0xFF2E2018),
+    text = Color(0xFFF5EDE0),
+    textMuted = Color(0xFFB89A7A),
+    textFaint = Color(0xFF7A604A),
+    border = Color(0x28F5EDE0),
+    accent = Color(0xFFC66A3D),
+    accentSoft = Color(0x33C66A3D),
+    onAccent = Color.White,
+    moodAwful = Color(0xFFD94747),
+    moodBad = Color(0xFFE88A3C),
+    moodOkay = Color(0xFFE8C547),
+    moodGood = Color(0xFF7EC050),
+    moodGreat = Color(0xFF3CB89C),
+    heatmap0 = Color(0xFF3A2E20),
+    heatmap1 = Color(0xFF7A6A30),
+    heatmap2 = Color(0xFFA07030),
+    heatmap3 = Color(0xFF806840),
+    heatmap4 = Color(0xFF4A6020),
+    danger = Color(0xFFE05050),
+)
