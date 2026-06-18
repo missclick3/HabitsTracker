@@ -1,48 +1,83 @@
-This is a Kotlin Multiplatform project targeting Android, iOS, Desktop (JVM).
+# HabitsTracker
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
+> **Work in progress**
 
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+A minimalist habit tracking app with daily mood reflection and a quote of the day. Built with Kotlin Multiplatform targeting Android, iOS, and Desktop JVM from a single codebase.
 
-### Build and Run Android Application
+## Screenshots
 
-To build and run the development version of the Android app, use the run configuration from the run widget
-in your IDE’s toolbar or build it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:assembleDebug
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:assembleDebug
-  ```
+| Home | Journal |
+|------|---------|
+| ![Home screen](screenshots/home.jpg) | ![Journal screen](screenshots/journal.jpg) |
 
-### Build and Run Desktop (JVM) Application
+## Stack
 
-To build and run the development version of the desktop app, use the run configuration from the run widget
-in your IDE’s toolbar or run it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:run
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:run
-  ```
+| Layer | Technology |
+|-------|-----------|
+| Language | Kotlin 2.3 |
+| UI | Compose Multiplatform 1.10 |
+| Targets | Android · iOS · Desktop JVM |
+| Database | Room 2.8 KMP + BundledSQLiteDriver |
+| Networking | Ktor 3.1 |
+| DI | Koin 4.x |
+| Navigation | AndroidX Navigation3 (type-safe, `@Serializable` routes) |
+| Async | Kotlin Coroutines + Flow |
+| Date/Time | kotlinx-datetime |
+| Serialization | kotlinx-serialization |
 
-### Build and Run iOS Application
+## Architecture
 
-To build and run the development version of the iOS app, use the run configuration from the run widget
-in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+The project follows a **feature-based modular MVI** architecture with clean layer separation.
 
----
+### Module structure
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+```
+composeApp/          — app entry point, Koin setup, navigation host, bottom bar
+core/                — shared design system, models, navigation contracts, utilities
+core/database/       — Room database, entities, DAOs
+feature/
+  home-api/          — public contract (routes, callbacks)
+  home-impl/         — home feature implementation
+  journal-api/       — public contract
+  journal-impl/      — journal feature implementation
+```
+
+Each feature is split into `-api` (public interface consumed by `composeApp`) and `-impl` (internal implementation).
+
+### Layer structure within a feature
+
+```
+Data        XxxRepository  ──►  domain model
+Domain      XxxUseCase     ──►  domain model
+Presenter   XxxViewModel   ──►  XxxState / XxxIntent / XxxEffect
+UI          XxxScreen + components/
+```
+
+- **Data** talks only to domain models — never to UI state
+- **Domain** use cases are single-responsibility and inject `DateProvider` / repositories
+- **Presenter** holds a `StateFlow<State>` and a `SharedFlow<Effect>`; navigation is called directly from the ViewModel via injected `Navigator`
+- **UI** is stateless — receives state and dispatches intents
+
+### MVI contracts
+
+Each feature defines a `XxxContract.kt` alongside the ViewModel:
+
+```kotlin
+sealed interface XxxIntent   // user actions
+data class XxxState(...)     // UI state snapshot
+sealed interface XxxEffect   // one-shot side effects (navigation, toasts)
+```
+
+### Dependency injection
+
+Koin 4.x. Each feature registers its own `module { }`. Platform-specific bindings (engine, context, API keys) are passed in via `platformModule` from the entry point (`MainActivity`, `main.kt`, `MainViewController`).
+
+### Navigation
+
+Type-safe via `Navigation3`. All routes implement `AppScreen` (a `@Serializable` sealed interface). `AppComposeNavigator` wraps the back stack. The `FeatureEntryBuilder` pattern lets each feature register its own nav entries without `composeApp` importing impl details.
+
+## Features
+
+- **Home** — greeting, date, quote of the day (fetched from API Ninjas, cached in Room by date), daily mood reflection with emoji picker, habit tracking (binary and count-based)
+- **Journal** — chronological list of past reflections showing date, mood, and note
+- **Habit management** — create, edit, and delete habits
