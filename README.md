@@ -34,7 +34,7 @@ The project follows a **feature-based modular MVI** architecture with clean laye
 ```
 composeApp/          — app entry point, Koin setup, navigation host, bottom bar
 core/                — shared design system, models, navigation contracts, utilities
-core/database/       — Room database, entities, DAOs
+core/database/       — Room database, entities, DAOs (separate Gradle module :database)
 feature/
   home-api/          — public contract (routes, callbacks)
   home-impl/         — home feature implementation
@@ -74,7 +74,7 @@ Koin 4.x. Each feature registers its own `module { }`. Platform-specific binding
 
 ### Navigation
 
-Type-safe via `Navigation3`. All routes implement `AppScreen` (a `@Serializable` sealed interface). `AppComposeNavigator` wraps the back stack. The `FeatureEntryBuilder` pattern lets each feature register its own nav entries without `composeApp` importing impl details.
+Type-safe via `Navigation3`. Each feature's `-api` module defines a `@Serializable` sealed interface implementing `NavKey` (e.g. `HomeScreenRoute`, `JournalScreenRoute`). `Navigator` (in `core/navigation/`) wraps a `SnapshotStateList<NavKey>` back stack. The `FeatureEntryBuilder` pattern lets each feature register its own nav entries without `composeApp` importing impl details.
 
 ## Features
 
