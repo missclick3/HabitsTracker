@@ -12,6 +12,8 @@ plugins {
     alias(libs.plugins.android.lint) apply false
     alias(libs.plugins.detekt) apply false
     alias(libs.plugins.ktlint) apply false
+    alias(libs.plugins.ksp) apply false
+    alias(libs.plugins.room) apply false
 }
 
 val checkNoHardcodedColors by tasks.registering {

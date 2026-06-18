@@ -3,6 +3,7 @@ package com.missclick.habitstracker.home.impl.data.repository
 import com.missclick.habitstracker.core.model.HabitId
 import com.missclick.habitstracker.core.model.HabitKind
 import com.missclick.habitstracker.core.model.Mood
+import com.missclick.habitstracker.home.impl.domain.model.Habit
 import com.missclick.habitstracker.home.impl.domain.repository.HomeHabit
 import com.missclick.habitstracker.home.impl.domain.repository.HomeReflection
 import com.missclick.habitstracker.home.impl.domain.repository.HomeSnapshot
@@ -17,6 +18,7 @@ internal class InMemoryHomeRepository : IHomeRepository {
         MutableStateFlow(
             HomeSnapshot(
                 dateLabel = "",
+                userName = "You",
                 habits =
                     listOf(
                         HomeHabit(
@@ -54,10 +56,7 @@ internal class InMemoryHomeRepository : IHomeRepository {
                         if (habit.id != habitId || habit.kind != HabitKind.Binary) {
                             habit
                         } else {
-                            val nextCompleted = !habit.isCompleted
-                            habit.copy(
-                                isCompleted = nextCompleted,
-                            )
+                            habit.copy(isCompleted = !habit.isCompleted)
                         }
                     },
             )
@@ -74,10 +73,7 @@ internal class InMemoryHomeRepository : IHomeRepository {
                         } else {
                             val target = habit.targetCount ?: return@map habit
                             val nextCount = (habit.currentCount + 1).coerceAtMost(target)
-                            habit.copy(
-                                currentCount = nextCount,
-                                isCompleted = nextCount >= target,
-                            )
+                            habit.copy(currentCount = nextCount, isCompleted = nextCount >= target)
                         }
                     },
             )
@@ -94,10 +90,7 @@ internal class InMemoryHomeRepository : IHomeRepository {
                         } else {
                             val target = habit.targetCount ?: return@map habit
                             val nextCount = (habit.currentCount - 1).coerceAtLeast(0)
-                            habit.copy(
-                                currentCount = nextCount,
-                                isCompleted = nextCount >= target,
-                            )
+                            habit.copy(currentCount = nextCount, isCompleted = nextCount >= target)
                         }
                     },
             )
@@ -115,4 +108,44 @@ internal class InMemoryHomeRepository : IHomeRepository {
             current.copy(reflection = current.reflection.copy(note = note))
         }
     }
+
+    override suspend fun createHabit(habit: Habit) {
+        snapshot.update { current ->
+            current.copy(
+                habits = current.habits + HomeHabit(
+                    id = habit.id,
+                    title = habit.title,
+                    kind = habit.kind,
+                    isCompleted = false,
+                    currentCount = 0,
+                    targetCount = habit.targetCount,
+                ),
+            )
+        }
+    }
+
+    override suspend fun updateHabit(habit: Habit) {
+        snapshot.update { current ->
+            current.copy(
+                habits = current.habits.map { h ->
+                    if (h.id == habit.id) {
+                        h.copy(title = habit.title, kind = habit.kind, targetCount = habit.targetCount)
+                    } else {
+                        h
+                    }
+                },
+            )
+        }
+    }
+
+    override suspend fun deleteHabit(habitId: HabitId) {
+        snapshot.update { current ->
+            current.copy(habits = current.habits.filter { it.id != habitId })
+        }
+    }
+
+    override suspend fun getHabitById(id: HabitId): Habit? =
+        snapshot.value.habits.find { it.id == id }?.let { h ->
+            Habit(id = h.id, title = h.title, kind = h.kind, targetCount = h.targetCount)
+        }
 }

@@ -3,6 +3,7 @@ package com.missclick.habitstracker.home.impl.domain.repository
 import com.missclick.habitstracker.core.model.HabitId
 import com.missclick.habitstracker.core.model.HabitKind
 import com.missclick.habitstracker.core.model.Mood
+import com.missclick.habitstracker.home.impl.domain.model.Habit
 import kotlinx.coroutines.flow.Flow
 
 internal interface IHomeRepository {
@@ -17,10 +18,19 @@ internal interface IHomeRepository {
     suspend fun updateMood(mood: Mood)
 
     suspend fun updateReflectionNote(note: String)
+
+    suspend fun createHabit(habit: Habit)
+
+    suspend fun updateHabit(habit: Habit)
+
+    suspend fun deleteHabit(habitId: HabitId)
+
+    suspend fun getHabitById(id: HabitId): Habit?
 }
 
 internal data class HomeSnapshot(
     val dateLabel: String,
+    val userName: String,
     val habits: List<HomeHabit>,
     val reflection: HomeReflection,
 )

@@ -9,6 +9,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.core)
+            implementation(projects.database)
             implementation(projects.homeApi)
             implementation(projects.homeImpl)
             implementation(libs.androidx.navigation3.runtime)

@@ -17,4 +17,19 @@
     <string name="home_count_supporting">%1$d of %2$d</string>
     <string name="home_count_complete">Complete</string>
     <string name="home_count_in_progress">In progress</string>
+    <string name="home_create_title">Create Habit</string>
+    <string name="home_create_save">Create</string>
+    <string name="home_edit_title">Edit Habit</string>
+    <string name="home_edit_habit_name_label">Habit name</string>
+    <string name="home_edit_kind_label">Type</string>
+    <string name="home_edit_kind_binary">Binary</string>
+    <string name="home_edit_kind_count">Count</string>
+    <string name="home_edit_target_label">Daily target</string>
+    <string name="home_edit_save">Save</string>
+    <string name="home_edit_delete">Delete habit</string>
+    <string name="home_dialog_close">Close</string>
+    <string name="home_dialog_archive_title">Archive</string>
+    <string name="home_dialog_archive_body">Archive is not yet implemented.</string>
+    <string name="home_dialog_create_title">Create habit</string>
+    <string name="home_dialog_create_body">Create habit is not yet implemented.</string>
 </resources>

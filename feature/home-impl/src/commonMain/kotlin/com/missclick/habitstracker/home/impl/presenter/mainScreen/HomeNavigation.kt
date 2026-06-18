@@ -11,6 +11,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.missclick.habitstracker.home.impl.ui.HomeScreen
+import habitstracker.home_impl.generated.resources.Res
+import habitstracker.home_impl.generated.resources.home_dialog_archive_body
+import habitstracker.home_impl.generated.resources.home_dialog_archive_title
+import habitstracker.home_impl.generated.resources.home_dialog_close
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -31,26 +36,12 @@ internal fun HomeNavigation() {
         onIntent = viewModel::onIntent,
     )
 
-    when (val effect = activeEffect) {
-        HomeEffect.OpenArchive ->
-            PlaceholderEffectDialog(
-                title = "Archive",
-                body = "Archive is not yet implemented.",
-                onDismiss = { activeEffect = null },
-            )
-        HomeEffect.OpenCreateHabit ->
-            PlaceholderEffectDialog(
-                title = "Create habit",
-                body = "Create habit is not yet implemented.",
-                onDismiss = { activeEffect = null },
-            )
-        is HomeEffect.OpenEditHabit ->
-            PlaceholderEffectDialog(
-                title = "Edit habit",
-                body = "Edit habit ${effect.habitId.value} is not yet implemented.",
-                onDismiss = { activeEffect = null },
-            )
-        null -> Unit
+    if (activeEffect == HomeEffect.OpenArchive) {
+        PlaceholderEffectDialog(
+            title = stringResource(Res.string.home_dialog_archive_title),
+            body = stringResource(Res.string.home_dialog_archive_body),
+            onDismiss = { activeEffect = null },
+        )
     }
 }
 
@@ -65,7 +56,7 @@ private fun PlaceholderEffectDialog(
         title = { Text(title) },
         text = { Text(body) },
         confirmButton = {
-            TextButton(onClick = onDismiss) { Text("Close") }
+            TextButton(onClick = onDismiss) { Text(stringResource(Res.string.home_dialog_close)) }
         },
     )
 }

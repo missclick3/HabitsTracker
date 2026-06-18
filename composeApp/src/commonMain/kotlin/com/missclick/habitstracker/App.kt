@@ -30,6 +30,7 @@ import com.missclick.habitstracker.core.design.HabitsTrackerTheme
 import com.missclick.habitstracker.core.navigation.FeatureEntryBuilder
 import com.missclick.habitstracker.core.navigation.Navigator
 import com.missclick.habitstracker.core.navigation.createNavigator
+import com.missclick.habitstracker.database.di.databaseModule
 import com.missclick.habitstracker.home.api.HomeScreenRoute
 import com.missclick.habitstracker.home.impl.di.homeFeatureModule
 import habitstracker.composeapp.generated.resources.Res
@@ -41,16 +42,19 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.KoinApplication
 import org.koin.compose.getKoin
 import org.koin.compose.koinInject
+import org.koin.core.module.Module
 import org.koin.dsl.koinConfiguration
 import org.koin.dsl.module
 
 @Composable
 @Preview
-fun App() {
+fun App(platformModule: Module = module {}) {
     val configuration =
         koinConfiguration {
             modules(
                 module { single<Navigator> { createNavigator(start = HomeScreenRoute.HomeScreen) } },
+                platformModule,
+                databaseModule,
                 homeFeatureModule,
             )
         }
@@ -193,7 +197,7 @@ private fun BottomBarItem(
             imageVector = tab.icon,
             contentDescription = label,
             tint = if (selected) HabitsTheme.colors.accent else HabitsTheme.colors.textFaint,
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier.size(24.dp),
         )
         Text(
             text = label,

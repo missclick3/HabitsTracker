@@ -12,6 +12,7 @@ internal class HomeStateMapper {
     fun map(snapshot: HomeSnapshot): HomeState =
         HomeState(
             dateLabel = snapshot.dateLabel,
+            userName = snapshot.userName,
             habits = snapshot.habits.map(::mapHabit),
             reflection =
                 ReflectionUiState(

@@ -3,10 +3,12 @@ package com.missclick.habitstracker.home.impl.presenter.mainScreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.missclick.habitstracker.core.navigation.Navigator
+import com.missclick.habitstracker.home.api.HomeScreenRoute
 import com.missclick.habitstracker.home.impl.domain.usecase.DecrementHabitUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.GetTodayDateLabelUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.IncrementHabitUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.ObserveHomeUseCase
+import com.missclick.habitstracker.home.impl.domain.usecase.SeedDatabaseUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.ToggleHabitUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.UpdateReflectionMoodUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.UpdateReflectionNoteUseCase
@@ -34,6 +36,7 @@ internal class HomeViewModel(
     private val updateReflectionNote: UpdateReflectionNoteUseCase,
     private val getTodayDateLabelUseCase: GetTodayDateLabelUseCase,
     private val navigator: Navigator,
+    private val seedDatabase: SeedDatabaseUseCase,
 ) : ViewModel() {
     private val mutableState = MutableStateFlow(HomeState.default())
     private val mutableEffects = MutableSharedFlow<HomeEffect>()
@@ -45,8 +48,8 @@ internal class HomeViewModel(
         when (intent) {
             HomeIntent.Load -> load()
             HomeIntent.ArchiveClicked -> emitEffect(HomeEffect.OpenArchive)
-            HomeIntent.CreateHabitClicked -> emitEffect(HomeEffect.OpenCreateHabit)
-            is HomeIntent.HabitClicked -> emitEffect(HomeEffect.OpenEditHabit(intent.habitId))
+            HomeIntent.CreateHabitClicked -> navigator.navigate(HomeScreenRoute.EditHabitScreen(null))
+            is HomeIntent.HabitClicked -> navigator.navigate(HomeScreenRoute.EditHabitScreen(intent.habitId.value))
             is HomeIntent.ToggleHabit -> viewModelScope.launch { toggleHabit(intent.habitId) }
             is HomeIntent.IncrementHabit -> viewModelScope.launch { incrementHabit(intent.habitId) }
             is HomeIntent.DecrementHabit -> viewModelScope.launch { decrementHabit(intent.habitId) }
@@ -69,6 +72,7 @@ internal class HomeViewModel(
     }
 
     private fun load() {
+        viewModelScope.launch { seedDatabase() }
         observeHome().onEach { homeState ->
             mutableState.value =
                 homeState.copy(

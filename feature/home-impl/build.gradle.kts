@@ -8,6 +8,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.homeApi)
+            implementation(projects.database)
         }
     }
 }

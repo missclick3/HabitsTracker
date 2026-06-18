@@ -6,4 +6,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed interface HomeScreenRoute : NavKey {
     @Serializable data object HomeScreen : HomeScreenRoute
+
+    @Serializable data class EditHabitScreen(val habitId: String?) : HomeScreenRoute
 }

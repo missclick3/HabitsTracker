@@ -26,6 +26,7 @@ internal sealed interface HomeIntent {
 
 internal data class HomeState(
     val dateLabel: String,
+    val userName: String,
     val habits: List<HomeHabitItem>,
     val reflection: ReflectionUiState,
     val isEmpty: Boolean,
@@ -35,6 +36,7 @@ internal data class HomeState(
         fun default() =
             HomeState(
                 dateLabel = EMPTY_STRING,
+                userName = EMPTY_STRING,
                 habits = emptyList(),
                 reflection = ReflectionUiState(),
                 isEmpty = true,
@@ -66,8 +68,4 @@ internal data class ReflectionUiState(
 
 internal sealed interface HomeEffect {
     data object OpenArchive : HomeEffect
-
-    data object OpenCreateHabit : HomeEffect
-
-    data class OpenEditHabit(val habitId: HabitId) : HomeEffect
 }

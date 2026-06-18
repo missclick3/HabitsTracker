@@ -69,7 +69,7 @@ internal fun HomeScreen(
     ) {
         item {
             HeaderBlock(
-                greetingLabel = "Alex Sterling",
+                greetingLabel = state.userName,
                 date = state.dateLabel.replace(".", EMPTY_STRING),
             )
         }
