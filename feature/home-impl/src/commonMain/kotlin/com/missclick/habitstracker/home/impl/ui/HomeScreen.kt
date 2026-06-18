@@ -35,6 +35,7 @@ import com.missclick.habitstracker.home.impl.presenter.mainScreen.HomeHabitProgr
 import com.missclick.habitstracker.home.impl.presenter.mainScreen.HomeIntent
 import com.missclick.habitstracker.home.impl.presenter.mainScreen.HomeState
 import com.missclick.habitstracker.home.impl.ui.components.HeaderBlock
+import com.missclick.habitstracker.home.impl.ui.components.QuoteCard
 import com.missclick.habitstracker.home.impl.ui.components.ReflectionsBlock
 import habitstracker.home_impl.generated.resources.Res
 import habitstracker.home_impl.generated.resources.home_archive_avatar_label
@@ -72,6 +73,10 @@ internal fun HomeScreen(
                 greetingLabel = state.userName,
                 date = state.dateLabel.replace(".", EMPTY_STRING),
             )
+        }
+
+        state.quote?.let { quote ->
+            item { QuoteCard(quote = quote) }
         }
 
         item {

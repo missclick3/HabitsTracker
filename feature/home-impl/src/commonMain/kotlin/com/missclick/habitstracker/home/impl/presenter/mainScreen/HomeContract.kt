@@ -24,11 +24,14 @@ internal sealed interface HomeIntent {
     data class ReflectionNoteChanged(val text: String) : HomeIntent
 }
 
+internal data class QuoteUiState(val text: String, val author: String)
+
 internal data class HomeState(
     val dateLabel: String,
     val userName: String,
     val habits: List<HomeHabitItem>,
     val reflection: ReflectionUiState,
+    val quote: QuoteUiState? = null,
     val isEmpty: Boolean,
     val isLoading: Boolean,
 ) {

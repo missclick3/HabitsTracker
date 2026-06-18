@@ -9,6 +9,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 class MainActivity : ComponentActivity() {
@@ -23,7 +24,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            App(platformModule = module { single<Context> { applicationContext } })
+            App(
+                platformModule = module {
+                    single<Context> { applicationContext }
+                    single(named("quoteApiKey")) { BuildConfig.QUOTE_API_KEY }
+                },
+            )
         }
     }
 }

@@ -11,6 +11,7 @@ internal expect fun createDatabaseBuilder(): RoomDatabase.Builder<HabitsDatabase
 val databaseModule = module {
     single<HabitsDatabase> {
         createDatabaseBuilder()
+            .fallbackToDestructiveMigration(dropAllTables = true)
             .setDriver(BundledSQLiteDriver())
             .setQueryCoroutineContext(Dispatchers.IO)
             .build()
@@ -19,4 +20,5 @@ val databaseModule = module {
     single { get<HabitsDatabase>().habitDailyRecordDao() }
     single { get<HabitsDatabase>().dailyReflectionDao() }
     single { get<HabitsDatabase>().userDao() }
+    single { get<HabitsDatabase>().quoteDao() }
 }

@@ -5,10 +5,12 @@ import androidx.room.RoomDatabase
 import com.missclick.habitstracker.database.dao.DailyReflectionDao
 import com.missclick.habitstracker.database.dao.HabitDao
 import com.missclick.habitstracker.database.dao.HabitDailyRecordDao
+import com.missclick.habitstracker.database.dao.QuoteDao
 import com.missclick.habitstracker.database.dao.UserDao
 import com.missclick.habitstracker.database.entity.DailyReflectionEntity
 import com.missclick.habitstracker.database.entity.HabitDailyRecordEntity
 import com.missclick.habitstracker.database.entity.HabitEntity
+import com.missclick.habitstracker.database.entity.QuoteEntity
 import com.missclick.habitstracker.database.entity.UserEntity
 
 @Database(
@@ -17,8 +19,9 @@ import com.missclick.habitstracker.database.entity.UserEntity
         HabitDailyRecordEntity::class,
         DailyReflectionEntity::class,
         UserEntity::class,
+        QuoteEntity::class,
     ],
-    version = 1,
+    version = 2,
     exportSchema = true,
 )
 abstract class HabitsDatabase : RoomDatabase() {
@@ -26,4 +29,5 @@ abstract class HabitsDatabase : RoomDatabase() {
     abstract fun habitDailyRecordDao(): HabitDailyRecordDao
     abstract fun dailyReflectionDao(): DailyReflectionDao
     abstract fun userDao(): UserDao
+    abstract fun quoteDao(): QuoteDao
 }

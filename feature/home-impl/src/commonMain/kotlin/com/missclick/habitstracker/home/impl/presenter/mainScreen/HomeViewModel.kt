@@ -10,6 +10,7 @@ import com.missclick.habitstracker.home.impl.domain.usecase.IncrementHabitUseCas
 import com.missclick.habitstracker.home.impl.domain.usecase.ObserveHomeUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.SeedDatabaseUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.ToggleHabitUseCase
+import com.missclick.habitstracker.home.impl.domain.usecase.GetQuoteOfDayUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.UpdateReflectionMoodUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.UpdateReflectionNoteUseCase
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -33,6 +34,7 @@ internal class HomeViewModel(
     private val getTodayDateLabelUseCase: GetTodayDateLabelUseCase,
     private val navigator: Navigator,
     private val seedDatabase: SeedDatabaseUseCase,
+    private val getQuoteOfDay: GetQuoteOfDayUseCase,
 ) : ViewModel() {
     private val mutableState = MutableStateFlow(HomeState.default())
     private val mutableEffects = MutableSharedFlow<HomeEffect>()
@@ -63,11 +65,18 @@ internal class HomeViewModel(
 
     private fun load() {
         viewModelScope.launch { seedDatabase() }
+        viewModelScope.launch {
+            getQuoteOfDay()?.let { quote ->
+                mutableState.update { it.copy(quote = QuoteUiState(quote.text, quote.author)) }
+            }
+        }
         observeHome().onEach { homeState ->
-            mutableState.value =
+            mutableState.update { current ->
                 homeState.copy(
                     dateLabel = getTodayDateLabelUseCase(),
+                    quote = current.quote,
                 )
+            }
         }.launchIn(viewModelScope)
     }
 

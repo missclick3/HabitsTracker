@@ -1,6 +1,8 @@
 package com.missclick.habitstracker.home.impl.di
 
 import com.missclick.habitstracker.core.navigation.FeatureEntryBuilder
+import com.missclick.habitstracker.home.impl.data.network.QuoteApiDataSource
+import com.missclick.habitstracker.home.impl.data.repository.QuoteRepository
 import com.missclick.habitstracker.home.impl.data.repository.RoomHomeRepository
 import com.missclick.habitstracker.home.impl.data.repository.RoomUserRepository
 import com.missclick.habitstracker.home.impl.domain.mapper.HomeStateMapper
@@ -8,6 +10,7 @@ import com.missclick.habitstracker.home.impl.domain.repository.IHomeRepository
 import com.missclick.habitstracker.home.impl.domain.repository.IUserRepository
 import com.missclick.habitstracker.home.impl.domain.usecase.CreateHabitUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.DateProvider
+import com.missclick.habitstracker.home.impl.domain.usecase.GetQuoteOfDayUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.DeleteHabitUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.DecrementHabitUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.GetHabitByIdUseCase
@@ -26,6 +29,10 @@ import com.missclick.habitstracker.home.impl.domain.usecase.UpdateUserNameUseCas
 import com.missclick.habitstracker.home.impl.navigation.homeEntries
 import com.missclick.habitstracker.home.impl.presenter.editHabit.EditHabitViewModel
 import com.missclick.habitstracker.home.impl.presenter.mainScreen.HomeViewModel
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
@@ -33,6 +40,15 @@ import org.koin.dsl.module
 
 val homeFeatureModule: Module =
     module {
+        single {
+            HttpClient {
+                install(ContentNegotiation) { json(Json { ignoreUnknownKeys = true }) }
+            }
+        }
+        single { QuoteApiDataSource(client = get(), apiKey = get(named("quoteApiKey"))) }
+        single { QuoteRepository(dao = get(), dataSource = get()) }
+        single { GetQuoteOfDayUseCase(repo = get(), dateProvider = get()) }
+
         single<DateProvider> { SystemDateProvider() }
 
         single {
@@ -79,6 +95,7 @@ val homeFeatureModule: Module =
                 getTodayDateLabelUseCase = get(),
                 navigator = get(),
                 seedDatabase = get(),
+                getQuoteOfDay = get(),
             )
         }
         viewModel { params ->

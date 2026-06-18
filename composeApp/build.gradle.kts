@@ -1,4 +1,5 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import java.util.Properties
 
 plugins {
     id("habitstracker.android.application")
@@ -30,11 +31,20 @@ kotlin {
     }
 }
 
+val localProps = Properties().apply {
+    rootProject.file("local.properties").takeIf { it.exists() }?.inputStream()?.use { load(it) }
+}
+
 android {
     namespace = "com.missclick.habitstracker"
 
     defaultConfig {
         applicationId = "com.missclick.habitstracker"
+        buildConfigField("String", "QUOTE_API_KEY", "\"${localProps["QUOTE_API_KEY"] ?: ""}\"")
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 }
 
