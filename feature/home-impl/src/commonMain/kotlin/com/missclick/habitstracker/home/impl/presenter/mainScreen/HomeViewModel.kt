@@ -19,8 +19,11 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 internal class HomeViewModel(
     private val observeHome: ObserveHomeUseCase,
@@ -34,8 +37,6 @@ internal class HomeViewModel(
 ) : ViewModel() {
     private val mutableState = MutableStateFlow(HomeState.default())
     private val mutableEffects = MutableSharedFlow<HomeEffect>()
-    private var observeJob: Job? = null
-    private var noteSaveJob: Job? = null
 
     val state: StateFlow<HomeState> = mutableState.asStateFlow()
     val effects: SharedFlow<HomeEffect> = mutableEffects.asSharedFlow()
@@ -46,52 +47,39 @@ internal class HomeViewModel(
             HomeIntent.ArchiveClicked -> emitEffect(HomeEffect.OpenArchive)
             HomeIntent.CreateHabitClicked -> emitEffect(HomeEffect.OpenCreateHabit)
             is HomeIntent.HabitClicked -> emitEffect(HomeEffect.OpenEditHabit(intent.habitId))
-            is HomeIntent.ToggleHabit -> launch { toggleHabit(intent.habitId) }
-            is HomeIntent.IncrementHabit -> launch { incrementHabit(intent.habitId) }
-            is HomeIntent.DecrementHabit -> launch { decrementHabit(intent.habitId) }
+            is HomeIntent.ToggleHabit -> viewModelScope.launch { toggleHabit(intent.habitId) }
+            is HomeIntent.IncrementHabit -> viewModelScope.launch { incrementHabit(intent.habitId) }
+            is HomeIntent.DecrementHabit -> viewModelScope.launch { decrementHabit(intent.habitId) }
             is HomeIntent.MoodSelected -> {
                 mutableState.update { current ->
                     current.copy(reflection = current.reflection.copy(selectedMood = intent.mood))
                 }
-                launch { updateReflectionMood(intent.mood) }
+                viewModelScope.launch { updateReflectionMood(intent.mood) }
             }
             is HomeIntent.ReflectionNoteChanged -> {
                 mutableState.update { current ->
                     current.copy(reflection = current.reflection.copy(note = intent.text))
                 }
-                noteSaveJob?.cancel()
-                noteSaveJob =
-                    launch {
-                        delay(NOTE_AUTOSAVE_DELAY_MS)
-                        updateReflectionNote(intent.text)
-                    }
+                viewModelScope.launch {
+                    delay(NOTE_AUTOSAVE_DELAY_MS.milliseconds)
+                    updateReflectionNote(intent.text)
+                }
             }
         }
     }
 
     private fun load() {
-        if (observeJob != null) {
-            return
-        }
-
-        observeJob =
-            launch {
-                observeHome().collect { homeState ->
-                    mutableState.value =
-                        homeState.copy(
-                            dateLabel = getTodayDateLabelUseCase(),
-                        )
-                }
-            }
+        observeHome().onEach { homeState ->
+            mutableState.value =
+                homeState.copy(
+                    dateLabel = getTodayDateLabelUseCase(),
+                )
+        }.launchIn(viewModelScope)
     }
 
-    private fun emitEffect(effect: HomeEffect) {
-        launch {
-            mutableEffects.emit(effect)
-        }
+    private fun emitEffect(effect: HomeEffect) = viewModelScope.launch {
+        mutableEffects.emit(effect)
     }
-
-    private fun launch(block: suspend CoroutineScope.() -> Unit): Job = viewModelScope.launch(block = block)
 
     private companion object {
         const val NOTE_AUTOSAVE_DELAY_MS = 500L

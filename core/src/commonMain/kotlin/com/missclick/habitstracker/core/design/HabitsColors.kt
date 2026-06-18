@@ -1,10 +1,10 @@
-package com.missclick.habitstracker.core.design.v2
+package com.missclick.habitstracker.core.design
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 
 @Immutable
-data class HabitsColorsV2(
+data class HabitsColors(
     val background: Color,
     val surface: Color,
     val surfaceAlt: Color,
@@ -28,14 +28,14 @@ data class HabitsColorsV2(
     val danger: Color,
 )
 
-val HabitsCozyLightColors = HabitsColorsV2(
+val HabitsLightColors = HabitsColors(
     background = Color(0xFFF5EDE0),
     surface = Color(0xFFFFFAF2),
     surfaceAlt = Color(0xFFEBDFC8),
     text = Color(0xFF2A1D12),
     textMuted = Color(0xFF8A6F52),
     textFaint = Color(0xFFC4A886),
-    border = Color(0x144A2D14), // rgba(74,45,20,0.08)
+    border = Color(0x144A2D14),
     accent = Color(0xFFC66A3D),
     accentSoft = Color(0xFFF5D9C4),
     onAccent = Color.White,
@@ -52,7 +52,7 @@ val HabitsCozyLightColors = HabitsColorsV2(
     danger = Color(0xFFC0392B),
 )
 
-val HabitsCozyDarkColors = HabitsColorsV2(
+val HabitsDarkColors = HabitsColors(
     background = Color(0xFF1A110A),
     surface = Color(0xFF231810),
     surfaceAlt = Color(0xFF2E2018),

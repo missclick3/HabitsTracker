@@ -5,6 +5,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -54,8 +56,11 @@ private fun HabitCard(
 ) = Box(
     modifier =
         Modifier
-            .background(color = HabitsTheme.colors.onBrand, shape = RoundedCornerShape(28.dp))
-            .clickable(onClick = { onOpenEdit(habit.id) }),
+            .background(color = HabitsTheme.colors.onAccent, shape = RoundedCornerShape(28.dp))
+            .clickable(onClick = { onOpenEdit(habit.id) })
+            .height(
+                height = TODO()
+            ),
 ) {
 }
 

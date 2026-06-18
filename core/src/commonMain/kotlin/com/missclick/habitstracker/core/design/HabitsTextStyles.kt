@@ -1,4 +1,4 @@
-package com.missclick.habitstracker.core.design.v2
+package com.missclick.habitstracker.core.design
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.TextStyle
@@ -7,7 +7,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 @Immutable
-data class HabitsTextStylesV2(
+data class HabitsTextStyles(
     val displayLarge: TextStyle,
     val displayMedium: TextStyle,
     val displaySmall: TextStyle,
@@ -20,11 +20,11 @@ data class HabitsTextStylesV2(
     val navLabel: TextStyle,
 )
 
-fun habitsTextStylesV2(
+fun habitsTextStyles(
     displayFamily: FontFamily,
     bodyFamily: FontFamily,
-): HabitsTextStylesV2 =
-    HabitsTextStylesV2(
+): HabitsTextStyles =
+    HabitsTextStyles(
         displayLarge =
             TextStyle(
                 fontFamily = displayFamily,

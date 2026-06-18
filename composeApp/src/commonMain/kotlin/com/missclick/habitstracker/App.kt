@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -134,17 +135,19 @@ private fun AppBottomBar(
                 modifier =
                     Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 28.dp, vertical = 18.dp),
+                        .padding(horizontal = HabitsTheme.dimensions.spacingXxl, vertical = 18.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 BottomBarItem(
+                    tab = BottomTab.HOME,
                     label = stringResource(Res.string.app_bottom_home),
                     selected = selectedTab == BottomTab.HOME,
                     onClick = { onTabSelected(BottomTab.HOME) },
                 )
                 Spacer(modifier = Modifier.size(72.dp))
                 BottomBarItem(
+                    tab = BottomTab.JOURNAL,
                     label = stringResource(Res.string.app_bottom_journal),
                     selected = selectedTab == BottomTab.JOURNAL,
                     onClick = { onTabSelected(BottomTab.JOURNAL) },
@@ -160,14 +163,14 @@ private fun AppBottomBar(
                     .clip(CircleShape)
                     .clickable(onClick = onAddClicked),
             shape = CircleShape,
-            color = HabitsTheme.colors.brandPrimary,
+            color = HabitsTheme.colors.accent,
             shadowElevation = 16.dp,
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Text(
                     text = "+",
-                    style = HabitsTheme.textStyles.headerName,
-                    color = HabitsTheme.colors.onBrand,
+                    style = HabitsTheme.textStyles.displayMedium,
+                    color = HabitsTheme.colors.onAccent,
                 )
             }
         }
@@ -176,6 +179,7 @@ private fun AppBottomBar(
 
 @Composable
 private fun BottomBarItem(
+    tab: BottomTab,
     label: String,
     selected: Boolean,
     onClick: () -> Unit,
@@ -185,13 +189,15 @@ private fun BottomBarItem(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
-        Text(
-            text = if (selected) "*" else "o",
-            color = if (selected) HabitsTheme.colors.brandPrimary else HabitsTheme.colors.textInactive,
+        Icon(
+            imageVector = tab.icon,
+            contentDescription = label,
+            tint = if (selected) HabitsTheme.colors.accent else HabitsTheme.colors.textFaint,
+            modifier = Modifier.size(24.dp)
         )
         Text(
             text = label,
-            color = if (selected) HabitsTheme.colors.brandPrimary else HabitsTheme.colors.textInactive,
+            color = if (selected) HabitsTheme.colors.accent else HabitsTheme.colors.textFaint,
             style = HabitsTheme.textStyles.navLabel,
         )
     }
@@ -212,18 +218,18 @@ private fun PlaceholderScreen(
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(HabitsTheme.dimensions.spacingMd),
         ) {
             Text(
                 text = title,
-                style = HabitsTheme.textStyles.headerName,
-                color = HabitsTheme.colors.textPrimary,
+                style = HabitsTheme.textStyles.displayMedium,
+                color = HabitsTheme.colors.text,
                 textAlign = TextAlign.Center,
             )
             Text(
                 text = body,
-                style = HabitsTheme.textStyles.bodyTextMuted,
-                color = HabitsTheme.colors.textHint,
+                style = HabitsTheme.textStyles.body,
+                color = HabitsTheme.colors.textFaint,
                 textAlign = TextAlign.Center,
             )
         }

@@ -13,6 +13,7 @@ kotlin {
             implementation(projects.homeImpl)
             implementation(libs.androidx.navigation3.runtime)
             implementation(libs.koin.compose)
+            implementation(compose.materialIconsExtended)
         }
 
         androidMain.dependencies {

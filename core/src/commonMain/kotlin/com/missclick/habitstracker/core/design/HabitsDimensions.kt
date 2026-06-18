@@ -1,11 +1,11 @@
-package com.missclick.habitstracker.core.design.v2
+package com.missclick.habitstracker.core.design
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Immutable
-data class HabitsDimensionsV2(
+data class HabitsDimensions(
     val spacingXs: Dp,
     val spacingSm: Dp,
     val spacingMd: Dp,
@@ -23,8 +23,8 @@ data class HabitsDimensionsV2(
     val cardGap: Dp,
 )
 
-val HabitsDefaultDimensionsV2 =
-    HabitsDimensionsV2(
+val HabitsDefaultDimensions =
+    HabitsDimensions(
         spacingXs = 4.dp,
         spacingSm = 8.dp,
         spacingMd = 12.dp,

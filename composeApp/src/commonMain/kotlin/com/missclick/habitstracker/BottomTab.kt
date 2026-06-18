@@ -1,11 +1,17 @@
 package com.missclick.habitstracker
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.List
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation3.runtime.NavKey
 import com.missclick.habitstracker.home.api.HomeScreenRoute
 
-enum class BottomTab {
-    HOME,
-    JOURNAL,
+enum class BottomTab(
+    val icon: ImageVector,
+) {
+    HOME(Icons.Default.Home),
+    JOURNAL(Icons.Default.List),
 }
 
 fun NavKey.toBottomTabOrNull(): BottomTab? =

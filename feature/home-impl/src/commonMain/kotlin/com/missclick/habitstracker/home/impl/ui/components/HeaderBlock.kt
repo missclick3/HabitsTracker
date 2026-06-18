@@ -39,8 +39,8 @@ internal fun HeaderBlock(
     Spacer(modifier = Modifier.size(24.dp))
     Text(
         text = date,
-        style = HabitsTheme.textStyles.headerDate,
-        color = HabitsTheme.colors.textPrimary,
+        style = HabitsTheme.textStyles.displayLarge,
+        color = HabitsTheme.colors.text,
     )
 }
 
@@ -55,19 +55,19 @@ private fun GreetingsBlock(
         modifier =
             Modifier
                 .size(48.dp)
-                .background(color = HabitsTheme.colors.success, shape = RoundedCornerShape(corner = CornerSize(16.dp))),
+                .background(color = HabitsTheme.colors.accent, shape = RoundedCornerShape(corner = CornerSize(16.dp))),
     )
     Spacer(modifier = Modifier.size(16.dp))
     Column {
         Text(
             text = (stringResource(Res.string.home_header_overline)).uppercase(),
-            style = HabitsTheme.textStyles.headerOverline,
-            color = HabitsTheme.colors.textTertiary,
+            style = HabitsTheme.textStyles.label,
+            color = HabitsTheme.colors.textMuted,
         )
         Text(
             text = greetingLabel,
-            style = HabitsTheme.textStyles.headerName,
-            color = HabitsTheme.colors.textPrimary,
+            style = HabitsTheme.textStyles.displayMedium,
+            color = HabitsTheme.colors.text,
         )
     }
 }

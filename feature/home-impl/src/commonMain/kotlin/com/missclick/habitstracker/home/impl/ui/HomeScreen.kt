@@ -65,7 +65,7 @@ internal fun HomeScreen(
             modifier
                 .fillMaxSize()
                 .background(HabitsTheme.colors.background),
-        verticalArrangement = Arrangement.spacedBy(20.dp),
+        verticalArrangement = Arrangement.spacedBy(HabitsTheme.dimensions.spacingXl),
     ) {
         item {
             HeaderBlock(
@@ -116,58 +116,6 @@ internal fun HomeScreen(
 }
 
 @Composable
-private fun HomeHeader(
-    greetingLabel: String?,
-    dateLabel: String,
-    onOpenArchive: () -> Unit,
-) {
-    Row(
-        modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(top = 24.dp, start = 20.dp, end = 20.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.Top,
-    ) {
-        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text(
-                text = (greetingLabel ?: stringResource(Res.string.home_header_overline)).uppercase(),
-                style = HabitsTheme.textStyles.headerOverline,
-                color = HabitsTheme.colors.textTertiary,
-            )
-            Text(
-                text = stringResource(Res.string.home_header_title),
-                style = HabitsTheme.textStyles.headerName,
-                color = HabitsTheme.colors.textPrimary,
-            )
-            Text(
-                text = dateLabel,
-                style = HabitsTheme.textStyles.headerDate,
-                color = HabitsTheme.colors.textSecondary,
-            )
-        }
-
-        Surface(
-            modifier =
-                Modifier
-                    .size(52.dp)
-                    .clip(CircleShape)
-                    .clickable(onClick = onOpenArchive),
-            color = HabitsTheme.colors.surface,
-            shadowElevation = 6.dp,
-        ) {
-            Box(contentAlignment = Alignment.Center) {
-                Text(
-                    text = stringResource(Res.string.home_archive_avatar_label),
-                    color = HabitsTheme.colors.brandPrimary,
-                    style = HabitsTheme.textStyles.actionLabel,
-                )
-            }
-        }
-    }
-}
-
-@Composable
 private fun SectionHeader(
     title: String,
     action: String,
@@ -177,20 +125,20 @@ private fun SectionHeader(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp),
+                .padding(horizontal = HabitsTheme.dimensions.pagePaddingHorizontal),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = title.uppercase(),
-            style = HabitsTheme.textStyles.sectionOverline,
-            color = HabitsTheme.colors.textTertiary,
+            style = HabitsTheme.textStyles.label,
+            color = HabitsTheme.colors.textMuted,
         )
         Text(
             text = action,
             modifier = Modifier.clickable(onClick = onActionClick),
-            style = HabitsTheme.textStyles.actionLabel,
-            color = HabitsTheme.colors.brandPrimary,
+            style = HabitsTheme.textStyles.label,
+            color = HabitsTheme.colors.accent,
         )
     }
 }
@@ -201,7 +149,7 @@ private fun EmptyHabitsCard(onCreateHabit: () -> Unit) {
         modifier =
             Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp),
+                .padding(horizontal = HabitsTheme.dimensions.pagePaddingHorizontal),
         colors = CardDefaults.cardColors(containerColor = HabitsTheme.colors.surface),
         shape = RoundedCornerShape(28.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
@@ -212,16 +160,16 @@ private fun EmptyHabitsCard(onCreateHabit: () -> Unit) {
                     .fillMaxWidth()
                     .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(HabitsTheme.dimensions.spacingMd),
         ) {
             Text(
                 text = stringResource(Res.string.home_empty_title),
-                style = HabitsTheme.textStyles.cardTitle,
-                color = HabitsTheme.colors.textStrong,
+                style = HabitsTheme.textStyles.bodyMedium,
+                color = HabitsTheme.colors.text,
             )
             Text(
                 text = stringResource(Res.string.home_empty_body),
-                style = HabitsTheme.textStyles.bodyTextMuted,
+                style = HabitsTheme.textStyles.body,
                 textAlign = TextAlign.Center,
                 color = HabitsTheme.colors.textMuted,
             )
@@ -229,8 +177,8 @@ private fun EmptyHabitsCard(onCreateHabit: () -> Unit) {
                 onClick = onCreateHabit,
                 colors =
                     ButtonDefaults.buttonColors(
-                        containerColor = HabitsTheme.colors.brandPrimary,
-                        contentColor = HabitsTheme.colors.onBrand,
+                        containerColor = HabitsTheme.colors.accent,
+                        contentColor = HabitsTheme.colors.onAccent,
                     ),
             ) {
                 Text(
@@ -280,14 +228,14 @@ private fun HabitCard(
                 ) {
                     Text(
                         text = habit.title,
-                        style = HabitsTheme.textStyles.cardTitle,
-                        color = HabitsTheme.colors.textStrong,
+                        style = HabitsTheme.textStyles.bodyMedium,
+                        color = HabitsTheme.colors.text,
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = habitSupportingText(habit.progress),
                         color = HabitsTheme.colors.textMuted,
-                        style = HabitsTheme.textStyles.bodyTextMuted,
+                        style = HabitsTheme.textStyles.body,
                     )
                 }
 
@@ -322,7 +270,7 @@ private fun BinaryProgressBadge(
             Modifier
                 .clip(CircleShape)
                 .clickable(onClick = onToggle),
-        color = if (isCompleted) HabitsTheme.colors.brandPrimary else HabitsTheme.colors.brandPrimarySoft,
+        color = if (isCompleted) HabitsTheme.colors.accent else HabitsTheme.colors.accentSoft,
     ) {
         Box(
             modifier = Modifier.size(56.dp),
@@ -335,8 +283,8 @@ private fun BinaryProgressBadge(
                     } else {
                         stringResource(Res.string.home_binary_mark)
                     },
-                color = if (isCompleted) HabitsTheme.colors.onBrand else HabitsTheme.colors.brandPrimary,
-                style = HabitsTheme.textStyles.actionLabel,
+                color = if (isCompleted) HabitsTheme.colors.onAccent else HabitsTheme.colors.accent,
+                style = HabitsTheme.textStyles.label,
             )
         }
     }
@@ -358,8 +306,8 @@ private fun CountProgressControls(
             StepChip(label = "-", onClick = onDecrement)
             Text(
                 text = "$current/$target",
-                style = HabitsTheme.textStyles.metricValue,
-                color = if (isCompleted) HabitsTheme.colors.success else HabitsTheme.colors.textSecondary,
+                style = HabitsTheme.textStyles.metric,
+                color = if (isCompleted) HabitsTheme.colors.accent else HabitsTheme.colors.textMuted,
             )
             StepChip(label = "+", onClick = onIncrement)
         }
@@ -371,8 +319,8 @@ private fun CountProgressControls(
                 } else {
                     stringResource(Res.string.home_count_in_progress)
                 },
-            style = HabitsTheme.textStyles.actionLabel,
-            color = if (isCompleted) HabitsTheme.colors.success else HabitsTheme.colors.textTertiary,
+            style = HabitsTheme.textStyles.label,
+            color = if (isCompleted) HabitsTheme.colors.accent else HabitsTheme.colors.textMuted,
         )
     }
 }
@@ -388,13 +336,13 @@ private fun StepChip(
                 .size(32.dp)
                 .clip(CircleShape)
                 .clickable(onClick = onClick),
-        color = HabitsTheme.colors.brandPrimarySoft,
+        color = HabitsTheme.colors.accentSoft,
     ) {
         Box(contentAlignment = Alignment.Center) {
             Text(
                 text = label,
-                color = HabitsTheme.colors.brandPrimary,
-                style = HabitsTheme.textStyles.actionLabel,
+                color = HabitsTheme.colors.accent,
+                style = HabitsTheme.textStyles.label,
             )
         }
     }

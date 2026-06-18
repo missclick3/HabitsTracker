@@ -54,8 +54,8 @@ internal fun ReflectionsBlock(
 ) {
     Text(
         text = stringResource(Res.string.home_reflection_section_title).uppercase(),
-        style = HabitsTheme.textStyles.sectionOverline,
-        color = HabitsTheme.colors.textTertiary,
+        style = HabitsTheme.textStyles.label,
+        color = HabitsTheme.colors.textMuted,
         modifier = Modifier.padding(horizontal = 4.dp),
     )
     Spacer(modifier = Modifier.size(16.dp))
@@ -68,8 +68,8 @@ internal fun ReflectionsBlock(
         Column(modifier = Modifier.padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
                 text = stringResource(Res.string.home_reflection_prompt),
-                style = HabitsTheme.textStyles.bodyPrompt,
-                color = HabitsTheme.colors.textStrong,
+                style = HabitsTheme.textStyles.bodyMedium,
+                color = HabitsTheme.colors.text,
             )
             Spacer(modifier = Modifier.size(24.dp))
             Row(
@@ -92,26 +92,26 @@ internal fun ReflectionsBlock(
                     Modifier
                         .fillMaxWidth()
                         .height(140.dp),
-                textStyle = HabitsTheme.textStyles.bodyText,
+                textStyle = HabitsTheme.textStyles.body,
                 shape = RoundedCornerShape(16.dp),
                 placeholder = {
                     Text(
                         text = stringResource(Res.string.home_reflection_note_placeholder),
-                        style = HabitsTheme.textStyles.bodyTextMuted,
-                        color = HabitsTheme.colors.textHint,
+                        style = HabitsTheme.textStyles.body,
+                        color = HabitsTheme.colors.textFaint,
                     )
                 },
                 colors =
                     OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = HabitsTheme.colors.surfaceSubtle,
-                        unfocusedContainerColor = HabitsTheme.colors.surfaceSubtle,
-                        focusedTextColor = HabitsTheme.colors.textPrimary,
-                        unfocusedTextColor = HabitsTheme.colors.textPrimary,
-                        focusedBorderColor = HabitsTheme.colors.brandPrimary,
+                        focusedContainerColor = HabitsTheme.colors.surfaceAlt,
+                        unfocusedContainerColor = HabitsTheme.colors.surfaceAlt,
+                        focusedTextColor = HabitsTheme.colors.text,
+                        unfocusedTextColor = HabitsTheme.colors.text,
+                        focusedBorderColor = HabitsTheme.colors.accent,
                         unfocusedBorderColor = HabitsTheme.colors.border,
-                        cursorColor = HabitsTheme.colors.brandPrimary,
-                        focusedPlaceholderColor = HabitsTheme.colors.textHint,
-                        unfocusedPlaceholderColor = HabitsTheme.colors.textHint,
+                        cursorColor = HabitsTheme.colors.accent,
+                        focusedPlaceholderColor = HabitsTheme.colors.textFaint,
+                        unfocusedPlaceholderColor = HabitsTheme.colors.textFaint,
                     ),
             )
         }
@@ -125,7 +125,7 @@ private fun MoodChip(
     onClick: () -> Unit,
 ) {
     val selectedBackground = if (isSelected) mood.toIconColor() else mood.toIconColor().copy(alpha = 0.1f)
-    val content = if (isSelected) Color.Black else HabitsTheme.colors.textInactive
+    val content = if (isSelected) Color.Black else HabitsTheme.colors.textFaint
 
     Surface(
         modifier =
@@ -158,9 +158,9 @@ private fun Mood.toIconResource(): DrawableResource =
 @Composable
 private fun Mood.toIconColor() =
     when (this) {
-        Mood.Drained -> HabitsTheme.colors.moodDrained
-        Mood.Low -> HabitsTheme.colors.moodLow
-        Mood.Neutral -> HabitsTheme.colors.moodNeutral
+        Mood.Drained -> HabitsTheme.colors.moodAwful
+        Mood.Low -> HabitsTheme.colors.moodBad
+        Mood.Neutral -> HabitsTheme.colors.moodOkay
         Mood.Good -> HabitsTheme.colors.moodGood
         Mood.Great -> HabitsTheme.colors.moodGreat
     }
