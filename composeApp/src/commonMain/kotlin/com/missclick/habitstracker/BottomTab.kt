@@ -6,6 +6,7 @@ import androidx.compose.material.icons.filled.List
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation3.runtime.NavKey
 import com.missclick.habitstracker.home.api.HomeScreenRoute
+import com.missclick.habitstracker.journal.api.JournalScreenRoute
 
 enum class BottomTab(
     val icon: ImageVector,
@@ -17,12 +18,12 @@ enum class BottomTab(
 fun NavKey.toBottomTabOrNull(): BottomTab? =
     when (this) {
         HomeScreenRoute.HomeScreen -> BottomTab.HOME
-        JournalRoute -> BottomTab.JOURNAL
+        JournalScreenRoute.JournalScreen -> BottomTab.JOURNAL
         else -> null
     }
 
 fun BottomTab.toRoute(): NavKey =
     when (this) {
         BottomTab.HOME -> HomeScreenRoute.HomeScreen
-        BottomTab.JOURNAL -> JournalRoute
+        BottomTab.JOURNAL -> JournalScreenRoute.JournalScreen
     }

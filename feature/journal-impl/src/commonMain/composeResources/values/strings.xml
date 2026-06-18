@@ -1,0 +1,10 @@
+<resources>
+    <string name="journal_title">Journal</string>
+    <string name="journal_empty_title">Nothing yet</string>
+    <string name="journal_empty_body">Your daily reflections will appear here.</string>
+    <string name="journal_mood_drained">Drained</string>
+    <string name="journal_mood_low">Low</string>
+    <string name="journal_mood_neutral">Neutral</string>
+    <string name="journal_mood_good">Good</string>
+    <string name="journal_mood_great">Great</string>
+</resources>

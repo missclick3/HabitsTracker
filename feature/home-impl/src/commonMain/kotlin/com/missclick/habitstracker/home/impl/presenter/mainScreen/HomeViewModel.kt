@@ -12,9 +12,6 @@ import com.missclick.habitstracker.home.impl.domain.usecase.SeedDatabaseUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.ToggleHabitUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.UpdateReflectionMoodUseCase
 import com.missclick.habitstracker.home.impl.domain.usecase.UpdateReflectionNoteUseCase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -25,7 +22,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlin.time.Duration.Companion.milliseconds
 
 internal class HomeViewModel(
     private val observeHome: ObserveHomeUseCase,
@@ -59,14 +55,8 @@ internal class HomeViewModel(
                 }
                 viewModelScope.launch { updateReflectionMood(intent.mood) }
             }
-            is HomeIntent.ReflectionNoteChanged -> {
-                mutableState.update { current ->
-                    current.copy(reflection = current.reflection.copy(note = intent.text))
-                }
-                viewModelScope.launch {
-                    delay(NOTE_AUTOSAVE_DELAY_MS.milliseconds)
-                    updateReflectionNote(intent.text)
-                }
+            is HomeIntent.ReflectionNoteChanged -> viewModelScope.launch {
+                updateReflectionNote(intent.text)
             }
         }
     }
@@ -83,9 +73,5 @@ internal class HomeViewModel(
 
     private fun emitEffect(effect: HomeEffect) = viewModelScope.launch {
         mutableEffects.emit(effect)
-    }
-
-    private companion object {
-        const val NOTE_AUTOSAVE_DELAY_MS = 500L
     }
 }

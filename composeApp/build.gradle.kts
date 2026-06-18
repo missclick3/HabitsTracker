@@ -12,6 +12,8 @@ kotlin {
             implementation(projects.database)
             implementation(projects.homeApi)
             implementation(projects.homeImpl)
+            implementation(projects.journalApi)
+            implementation(projects.journalImpl)
             implementation(libs.androidx.navigation3.runtime)
             implementation(libs.koin.compose)
             implementation(compose.materialIconsExtended)

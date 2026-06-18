@@ -19,6 +19,11 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.missclick.habitstracker.core.design.HabitsTheme
 import com.missclick.habitstracker.core.model.Mood
+import com.missclick.habitstracker.core.uiutils.useDebounce
 import com.missclick.habitstracker.home.impl.presenter.mainScreen.ReflectionUiState
 import habitstracker.core.generated.resources.mood_drained
 import habitstracker.core.generated.resources.mood_good
@@ -46,74 +52,84 @@ internal fun ReflectionsBlock(
     state: ReflectionUiState,
     onMoodSelected: (Mood) -> Unit,
     onNoteChanged: (String) -> Unit,
-) = Column(
-    modifier =
-        Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp),
 ) {
-    Text(
-        text = stringResource(Res.string.home_reflection_section_title).uppercase(),
-        style = HabitsTheme.textStyles.label,
-        color = HabitsTheme.colors.textMuted,
-        modifier = Modifier.padding(horizontal = 4.dp),
-    )
-    Spacer(modifier = Modifier.size(16.dp))
-    Box(
+    var noteText by remember { mutableStateOf(state.note) }
+
+    LaunchedEffect(state.note) {
+        if (state.note != noteText) noteText = state.note
+    }
+
+    noteText.useDebounce(onChange = onNoteChanged)
+
+    Column(
         modifier =
             Modifier
                 .fillMaxWidth()
-                .background(HabitsTheme.colors.surface, RoundedCornerShape(28.dp)),
+                .padding(horizontal = 24.dp),
     ) {
-        Column(modifier = Modifier.padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(
-                text = stringResource(Res.string.home_reflection_prompt),
-                style = HabitsTheme.textStyles.bodyMedium,
-                color = HabitsTheme.colors.text,
-            )
-            Spacer(modifier = Modifier.size(24.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                Mood.entries.forEach { mood ->
-                    MoodChip(
-                        mood = mood,
-                        isSelected = state.selectedMood == mood,
-                        onClick = { onMoodSelected(mood) },
-                    )
+        Text(
+            text = stringResource(Res.string.home_reflection_section_title).uppercase(),
+            style = HabitsTheme.textStyles.label,
+            color = HabitsTheme.colors.textMuted,
+            modifier = Modifier.padding(horizontal = 4.dp),
+        )
+        Spacer(modifier = Modifier.size(16.dp))
+        Box(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .background(HabitsTheme.colors.surface, RoundedCornerShape(28.dp)),
+        ) {
+            Column(modifier = Modifier.padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    text = stringResource(Res.string.home_reflection_prompt),
+                    style = HabitsTheme.textStyles.bodyMedium,
+                    color = HabitsTheme.colors.text,
+                )
+                Spacer(modifier = Modifier.size(24.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Mood.entries.forEach { mood ->
+                        MoodChip(
+                            mood = mood,
+                            isSelected = state.selectedMood == mood,
+                            onClick = { onMoodSelected(mood) },
+                        )
+                    }
                 }
+                Spacer(modifier = Modifier.size(24.dp))
+                OutlinedTextField(
+                    value = noteText,
+                    onValueChange = { noteText = it },
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(140.dp),
+                    textStyle = HabitsTheme.textStyles.body,
+                    shape = RoundedCornerShape(16.dp),
+                    placeholder = {
+                        Text(
+                            text = stringResource(Res.string.home_reflection_note_placeholder),
+                            style = HabitsTheme.textStyles.body,
+                            color = HabitsTheme.colors.textFaint,
+                        )
+                    },
+                    colors =
+                        OutlinedTextFieldDefaults.colors(
+                            focusedContainerColor = HabitsTheme.colors.surfaceAlt,
+                            unfocusedContainerColor = HabitsTheme.colors.surfaceAlt,
+                            focusedTextColor = HabitsTheme.colors.text,
+                            unfocusedTextColor = HabitsTheme.colors.text,
+                            focusedBorderColor = HabitsTheme.colors.accent,
+                            unfocusedBorderColor = HabitsTheme.colors.border,
+                            cursorColor = HabitsTheme.colors.accent,
+                            focusedPlaceholderColor = HabitsTheme.colors.textFaint,
+                            unfocusedPlaceholderColor = HabitsTheme.colors.textFaint,
+                        ),
+                )
             }
-            Spacer(modifier = Modifier.size(24.dp))
-            OutlinedTextField(
-                value = state.note,
-                onValueChange = onNoteChanged,
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .height(140.dp),
-                textStyle = HabitsTheme.textStyles.body,
-                shape = RoundedCornerShape(16.dp),
-                placeholder = {
-                    Text(
-                        text = stringResource(Res.string.home_reflection_note_placeholder),
-                        style = HabitsTheme.textStyles.body,
-                        color = HabitsTheme.colors.textFaint,
-                    )
-                },
-                colors =
-                    OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = HabitsTheme.colors.surfaceAlt,
-                        unfocusedContainerColor = HabitsTheme.colors.surfaceAlt,
-                        focusedTextColor = HabitsTheme.colors.text,
-                        unfocusedTextColor = HabitsTheme.colors.text,
-                        focusedBorderColor = HabitsTheme.colors.accent,
-                        unfocusedBorderColor = HabitsTheme.colors.border,
-                        cursorColor = HabitsTheme.colors.accent,
-                        focusedPlaceholderColor = HabitsTheme.colors.textFaint,
-                        unfocusedPlaceholderColor = HabitsTheme.colors.textFaint,
-                    ),
-            )
         }
     }
 }

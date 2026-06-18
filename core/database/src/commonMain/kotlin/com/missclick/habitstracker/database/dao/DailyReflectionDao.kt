@@ -15,6 +15,12 @@ interface DailyReflectionDao {
     @Query("SELECT * FROM daily_reflections WHERE date = :date LIMIT 1")
     suspend fun getForDate(date: String): DailyReflectionEntity?
 
+    @Query("SELECT * FROM daily_reflections ORDER BY date DESC")
+    fun observeAll(): Flow<List<DailyReflectionEntity>>
+
+    @Query("SELECT COUNT(*) FROM daily_reflections")
+    suspend fun count(): Int
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsert(reflection: DailyReflectionEntity)
 }

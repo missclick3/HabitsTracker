@@ -33,11 +33,10 @@ import com.missclick.habitstracker.core.navigation.createNavigator
 import com.missclick.habitstracker.database.di.databaseModule
 import com.missclick.habitstracker.home.api.HomeScreenRoute
 import com.missclick.habitstracker.home.impl.di.homeFeatureModule
+import com.missclick.habitstracker.journal.impl.di.journalFeatureModule
 import habitstracker.composeapp.generated.resources.Res
 import habitstracker.composeapp.generated.resources.app_bottom_home
 import habitstracker.composeapp.generated.resources.app_bottom_journal
-import habitstracker.composeapp.generated.resources.app_journal_placeholder_body
-import habitstracker.composeapp.generated.resources.app_journal_placeholder_title
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.KoinApplication
 import org.koin.compose.getKoin
@@ -56,6 +55,7 @@ fun App(platformModule: Module = module {}) {
                 platformModule,
                 databaseModule,
                 homeFeatureModule,
+                journalFeatureModule,
             )
         }
 
@@ -87,18 +87,6 @@ fun App(platformModule: Module = module {}) {
                         )
                     },
                 ) { padding ->
-                    val journalEntry: FeatureEntryBuilder = {
-                        entry<JournalRoute> { _ ->
-                            PlaceholderScreen(
-                                modifier =
-                                    Modifier
-                                        .fillMaxSize()
-                                        .background(HabitsTheme.colors.background),
-                                title = stringResource(Res.string.app_journal_placeholder_title),
-                                body = stringResource(Res.string.app_journal_placeholder_body),
-                            )
-                        }
-                    }
                     AppNavHost(
                         modifier =
                             Modifier
@@ -106,7 +94,7 @@ fun App(platformModule: Module = module {}) {
                                 .padding(padding),
                         backStack = backStack,
                         onBack = { navigator.back() },
-                        builders = builders + journalEntry,
+                        builders = builders,
                     )
                 }
             }
